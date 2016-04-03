@@ -51,7 +51,7 @@ class SensorForward {
     case NORM:
       return sensor.getNormValue();
     case MAP:
-    println("map:"+sensor.value,rangeMap.in,rangeMap.out);
+   // println("map:"+sensor.value,rangeMap.in,rangeMap.out);
       return rangeMap.rMap(sensor.value);
     case RAW:
     default:

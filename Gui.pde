@@ -11,7 +11,6 @@ void setupGui() {
     .setSize(50, 20)
     .setLabel("save");
 
-
   Group audioGroup = cp5.addGroup("Audio")
     .setPosition(10, 20)
     .setBackgroundHeight(100)
@@ -27,7 +26,7 @@ void setupGui() {
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
 
-    cp5.addTextlabel(sensorNames[i])
+    cp5.addTextlabel(sensorNames[i]+"-a")
       .setText(sensorNames[i])
       .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
       .setGroup(audioGroup)
@@ -42,9 +41,7 @@ void setupGui() {
       .setGroup(audioGroup);
 
     createRange("range-in-a-", i, audioGroup, 50);
-
     createRadio("sensor-a-", i, audioGroup, 250);
-
     createRange("range-out-a-", i, audioGroup, 450);
   }
 
@@ -62,11 +59,33 @@ void setupGui() {
     .setLabel("> Visuals")
     .setGroup(visualsGroup);
 
+  for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
+
+    cp5.addTextlabel(sensorNames[i]+"-v")
+      .setText(sensorNames[i])
+      .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
+      .setGroup(audioGroup)
+      //.setColorValue(0xffffff0)
+      .setFont(createFont("Arial", 16))
+      ;
+
+ /*   cp5.addToggle("callibrate-"+i)
+      .setPosition(10, yBaseHeight + i * sensorYMargin)
+      .setSize(30, 20)
+      .setLabel("callibrate")
+      .setGroup(audioGroup);*/
+
+    createRange("range-in-v-", i, visualsGroup, 50);
+    createRadio("sensor-v-", i, visualsGroup, 250);
+    createRange("range-out-v-", i, visualsGroup, 450);
+  }
+
+
+  initRanges();
   init = false;
 }
 
 void controlEvent(ControlEvent event) {
-  println("e");
   if (init)
     return;
   String name = event.getName();
@@ -114,10 +133,10 @@ void createRadio(String preName, int index, Group g, int xPos) {
     .setColorLabel(color(255))
     .setItemsPerRow(5)
     .setSpacingColumn(30)
-    .addItem(index+"no", 1)
-    .addItem(index+"raw", 2)
-    .addItem(index+"norm", 3)
-    .addItem(index+"map", 4)
+    .addItem(preName+index+"no", 1)
+    .addItem(preName+index+"raw", 2)
+    .addItem(preName+index+"norm", 3)
+    .addItem(preName+index+"map", 4)
     .activate(1)
     .setNoneSelectedAllowed(false)
     .setGroup(g);
@@ -136,9 +155,9 @@ void createRange(String preName, int index, Group g, int xPos) {
     .setSize(180, 20)
     .setHandleSize(5)
     .setRange(0, 1023)
-    .setRangeValues(512, 513)
+    .setRangeValues(0, 1023)
     // after the initialization we turn broadcast back on again
-    .setBroadcast(false)
+    .setBroadcast(true)
     .setColorForeground(color(255, 40))
     .setColorBackground(color(255, 40))  
     .setLabel("")
@@ -159,6 +178,27 @@ SensorForward getSensorForward(String sendTo, int index) {
 
 void configSensor(SensorForward forward, int selection) {
   forward.setStyle(selection);
+}
+
+void initRanges() {
+  for (int i=0; i <NUMBER_OF_INPUT_VALUES; i++) {
+    Controller<Range> r = (Controller<Range>)  cp5.getController("range-in-a-"+i);
+    float min  = r.getArrayValue(0);
+    float max  = r.getArrayValue(1);
+    configInRange(getSensorForward("a", i), min, max);
+    // r = (Controller<Range>)  cp5.getController("range-in-v-"+i);
+    configInRange(getSensorForward("v", i), min, max );
+
+    // OUT
+    r = (Controller<Range>)  cp5.getController("range-out-a-"+i);
+    min  = r.getArrayValue(0);
+    max  = r.getArrayValue(1);
+    configOutRange(getSensorForward("a", i), min, max);
+    r = (Controller<Range>)  cp5.getController("range-out-v-"+i);
+    min  = r.getArrayValue(0);
+    max  = r.getArrayValue(1);
+    configOutRange(getSensorForward("v", i), min, max );
+  }
 }
 
 void configInRange(SensorForward forward, float min, float max) {
