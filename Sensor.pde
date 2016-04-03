@@ -13,8 +13,18 @@ class Sensor {
     return range.norm(value);
   }
 
+  void callibrate() {
+    range.dynamic = true;
+  }
+
   void adjust() {
     range.adjustRange(value);
+    if (range.dynamic) 
+      range.dynamic = false;
+  }
+
+  JSONObject getJSONObject() {
+    return range.getJSONObject();
   }
 }
 
@@ -41,6 +51,7 @@ class SensorForward {
     case NORM:
       return sensor.getNormValue();
     case MAP:
+    println("map:"+sensor.value,rangeMap.in,rangeMap.out);
       return rangeMap.rMap(sensor.value);
     case RAW:
     default:
@@ -50,5 +61,13 @@ class SensorForward {
 
   void setStyle(int selection) {
     style = ForwardStyle.values()[selection];
+  }
+
+  JSONObject getJSONObject() {
+    JSONObject json = new  JSONObject ();
+    json.setInt("style", (int) style.ordinal());
+    json.setJSONObject("toRange", rangeMap.out.getJSONObject());
+
+    return json;
   }
 }

@@ -2,6 +2,7 @@ class OscForward {
 
   boolean active = true;
   NetAddress remoteAddress;
+  //int port; // for json storing
 
   final SensorForward forwards[] = new SensorForward[NUMBER_OF_INPUT_VALUES];
   String messageTag;
@@ -12,13 +13,14 @@ class OscForward {
       forwards[i] = new SensorForward(sensors[i], new Range());
     }
     // osc
+    // this.port = port; 
     remoteAddress = new NetAddress(ipAddress, port);
   }
 
   void process() {
     if (!active) 
       return;
-    OscMessage msg = new OscMessage("/test");
+    OscMessage msg = new OscMessage(messageTag);
     for (SensorForward forward : forwards) {
       float value = forward.getValue();
       if (value != Float.NaN) {
@@ -26,6 +28,19 @@ class OscForward {
         //println(forward.sensor.value, value);
       }
     }
-    osc.send(msg,remoteAddress);
+    osc.send(msg, remoteAddress);
+  }
+
+  JSONObject getJSONObject() {
+    JSONObject json = new JSONObject();
+    json.setBoolean("active", active);
+    JSONArray forwardsJSON = new JSONArray();
+    for (int i=0; i < forwards.length; i++) {
+      forwardsJSON.setJSONObject(i,forwards[i].getJSONObject());
+    }
+    json.setJSONArray("forwards",forwardsJSON);
+    //json.setString("
+    //json.setString("ip",remoteAddress.getHostAddress());
+    return json;
   }
 }

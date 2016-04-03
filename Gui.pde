@@ -1,35 +1,56 @@
 boolean init = true;
 
+int yBaseHeight = 60;
+int sensorYMargin = 60;
+
 void setupGui() {
   cp5 = new ControlP5(this);
+
+  cp5.addBang("saveJSON")
+    .setPosition(300, 10)
+    .setSize(50, 20)
+    .setLabel("save");
+
 
   Group audioGroup = cp5.addGroup("Audio")
     .setPosition(10, 20)
     .setBackgroundHeight(100)
-    .setSize(100, 20)
+    .setSize(100, 1)
     .setBackgroundColor(color(255, 50))
     .close();
 
   cp5.addToggle("doForwardTo_Audio")
-    .setPosition(10, 10)
+    .setPosition(150, 20)
     .setSize(50, 20)
     .setLabel("> Audio")
     .setGroup(audioGroup);
 
-
-
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
 
-    createRange("range-in-a-", i, audioGroup, 10);
+    cp5.addTextlabel(sensorNames[i])
+      .setText(sensorNames[i])
+      .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
+      .setGroup(audioGroup)
+      //.setColorValue(0xffffff0)
+      .setFont(createFont("Arial", 16))
+      ;
 
-    createRadio("sensor-a-", i, audioGroup, 200);
+    cp5.addToggle("callibrate-"+i)
+      .setPosition(10, yBaseHeight + i * sensorYMargin)
+      .setSize(30, 20)
+      .setLabel("callibrate")
+      .setGroup(audioGroup);
 
-    createRange("range-out-a-", i, audioGroup, 400);
+    createRange("range-in-a-", i, audioGroup, 50);
+
+    createRadio("sensor-a-", i, audioGroup, 250);
+
+    createRange("range-out-a-", i, audioGroup, 450);
   }
 
   // VISUALS
   Group visualsGroup = cp5.addGroup("Visuals")
-    .setPosition(20, 400)
+    .setPosition(20, 600)
     .setSize(100, 20)
     .setBackgroundHeight(100)
     .setBackgroundColor(color(255, 50))
@@ -45,14 +66,15 @@ void setupGui() {
 }
 
 void controlEvent(ControlEvent event) {
+  println("e");
   if (init)
     return;
   String name = event.getName();
-  //println(name);
+  println(name);
   if (name.startsWith("sensor")) {
     String[] edit =  name.split("-");
-    String sendTo = edit[1];
     int index = Integer.valueOf(edit[2]);
+    String sendTo = edit[1];
     RadioButton radio = (RadioButton)event.getGroup();
     int selection=0;
     for (int i=0; i<event.getGroup().getArrayValue().length; i++) {
@@ -74,20 +96,18 @@ void controlEvent(ControlEvent event) {
       configInRange(getSensorForward(sendTo, index), min, max);
     else 
     configOutRange(getSensorForward(sendTo, index), min, max);
+  } else if (name.startsWith("callibrate")) {
+    String[] edit =  name.split("-");
+    int index = Integer.valueOf(edit[1]);
+    sensors[index].callibrate();
+  } else if (name.equals("save")) {
+    saveJSON();
   }
-  /* if(theEvent.isFrom(r1)) {
-   print("got an event from "+theEvent.getName()+"\t");
-   for(int i=0;i<theEvent.getGroup().getArrayValue().length;i++) {
-   print(int(theEvent.getGroup().getArrayValue()[i]));
-   }
-   println("\t "+theEvent.getValue());
-   myColorBackground = color(int(theEvent.getGroup().getValue()*50),0,0);
-   }*/
 }
 
 void createRadio(String preName, int index, Group g, int xPos) {
   RadioButton radio =  cp5.addRadioButton(preName+index)
-    .setPosition(xPos, 60+index*30)
+    .setPosition(xPos, yBaseHeight + index * sensorYMargin)
     .setSize(20, 20)
     .setColorForeground(color(120))
     .setColorActive(color(255))
@@ -112,7 +132,7 @@ void createRange(String preName, int index, Group g, int xPos) {
   controlP5.Range r= cp5.addRange(preName+index)
     // disable broadcasting since setRange and setRangeValues will trigger an event
     .setBroadcast(false) 
-    .setPosition(xPos, 60+index*30)
+    .setPosition(xPos, yBaseHeight + index * sensorYMargin)
     .setSize(180, 20)
     .setHandleSize(5)
     .setRange(0, 1023)
@@ -123,7 +143,6 @@ void createRange(String preName, int index, Group g, int xPos) {
     .setColorBackground(color(255, 40))  
     .setLabel("")
     .setGroup(g);
-
 }
 
 SensorForward getSensorForward(String sendTo, int index) {
@@ -150,6 +169,7 @@ void configInRange(SensorForward forward, float min, float max) {
 void configOutRange(SensorForward forward, float min, float max) {
   forward.rangeMap.out.min = min;
   forward.rangeMap.out.max = max;
+  println("r.o");
 }
 
 controlP5.Range getRangeInCtrl(String to, int index) {

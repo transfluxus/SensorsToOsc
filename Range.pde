@@ -19,13 +19,13 @@ public class Range {
 
   void adjustRange(float val) {
     //   println("ad",val,min,max);
-    //if (dynamic) { 
-    if (val < min) 
-      min = val;
-    else if (val > max) {
-      max = val;
+    if (dynamic) { 
+      if (val < min) 
+        min = val;
+      else if (val > max) {
+        max = val;
+      }
     }
-    //  }
     // println(min,max);
   }
 
@@ -39,6 +39,14 @@ public class Range {
 
   float[] getAr() {
     return new float[] {min, max };
+  }
+
+  JSONObject getJSONObject() {
+    JSONObject json = new JSONObject();
+    json.setFloat("min", min);
+    json.setFloat("max", max);
+    println(min,max);
+    return json;
   }
 }
 

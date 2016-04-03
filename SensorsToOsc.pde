@@ -10,7 +10,7 @@ int SERIAL_PORT_NO =  0;
 int SERIAL_BAUDRATE = 9600;
 
 // Sensor naming
-int NUMBER_OF_INPUT_VALUES = 7;
+int NUMBER_OF_INPUT_VALUES = 1;
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
   "left-arm", "right-arm", "left-leg", "right-leg", "spine"};
 
@@ -65,7 +65,7 @@ void draw() {
   if (toVisuals.active) {
     text(">V", width-40, height-20);
   }
-  //forward(""+(int)(noise(frameCount*0.01f)*1024));
+  forward(""+(int)(noise(frameCount*0.01f)*1024));
 }
 
 void keyPressed() {
@@ -83,7 +83,8 @@ void setupSerial() {
   for (String serial : Serial.list()) {
     println((si++), serial);
   }
-  new Serial(this, Serial.list()[SERIAL_PORT_NO], SERIAL_BAUDRATE);
+  //serial =
+  //new Serial(this, Serial.list()[SERIAL_PORT_NO], SERIAL_BAUDRATE);
 }
 
 void setupSensors() {
@@ -97,8 +98,6 @@ void setupOSCForward() {
   toAudio = new OscForward(AUDIO_IP_ADDRESS, AUDIO_PORT, AUDIO_MSG_TAG);
   toVisuals = new OscForward(VISUALS_IP_ADDRESS, VISUALS_PORT, VISUALS_MSG_TAG);
 }
-
-
 
 String serialMessage = "";
 
