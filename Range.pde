@@ -18,13 +18,13 @@ public class Range {
 
   void adjustRange(float val) {
     //   println("ad",val,min,max);
-  //  println("cal", val);
+    //  println("cal", val);
     if (val < min) 
       min = val;
     else if (val > max) {
       max = val;
     }
- //   println("cal", val, min, max);
+    //   println("cal", val, min, max);
   }
 
   String toString() {
@@ -43,8 +43,13 @@ public class Range {
     JSONObject json = new JSONObject();
     json.setFloat("min", min);
     json.setFloat("max", max);
-    println(min, max);
+    //println(min, max);
     return json;
+  }
+
+  void fromJSON(JSONObject json) {
+    min = json.getFloat("min");
+    max = json.getFloat("max");
   }
 }
 

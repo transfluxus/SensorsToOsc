@@ -3,6 +3,8 @@ boolean init = true;
 int yBaseHeight = 60;
 int sensorYMargin = 60;
 
+boolean pauseGUIFW;
+
 void setupGui() {
   cp5 = new ControlP5(this);
 
@@ -10,6 +12,11 @@ void setupGui() {
     .setPosition(300, 10)
     .setSize(50, 20)
     .setLabel("save");
+
+  cp5.addBang("loadJSON")
+    .setPosition(360, 10)
+    .setSize(50, 20)
+    .setLabel("load");
 
   Group audioGroup = cp5.addGroup("Audio")
     .setPosition(10, 20)
@@ -60,7 +67,6 @@ void setupGui() {
     .setGroup(visualsGroup);
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-
     cp5.addTextlabel(sensorNames[i]+"-v")
       .setText(sensorNames[i])
       .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
@@ -77,10 +83,11 @@ void setupGui() {
 }
 
 void controlEvent(ControlEvent event) {
-  if (init)
+  if (init || pauseGUIFW)
     return;
+  //println(pauseGUIFW);
   String name = event.getName();
-  println(name);
+  println("event:", name);
   if (name.startsWith("sensor")) {
     String[] edit =  name.split("-");
     int index = Integer.valueOf(edit[2]);
@@ -112,9 +119,12 @@ void controlEvent(ControlEvent event) {
     int index = Integer.valueOf(edit[1]);
     sensors[index].callibrate(on);
     cp5.getController("range-in-a-"+index).setBroadcast(!on);
-  } else if (name.equals("save")) {
-    saveJSON();
-  }
+  } 
+  /*else if (name.equals("save")) {
+   saveJSON();
+   } else if(name.equals("load")) {
+   loadJSON(); 
+   }*/
 }
 
 void createRadio(String preName, int index, Group g, int xPos) {
@@ -208,4 +218,8 @@ void configOutRange(SensorForward forward, float min, float max) {
 
 controlP5.Range getRangeInCtrl(String to, int index) {
   return (controlP5.Range) cp5.getController("range-in-"+to+"-"+index).update();
+}
+
+controlP5.Range getRangeOutCtrl(String to, int index) {
+  return (controlP5.Range) cp5.getController("range-out-"+to+"-"+index).update();
 }

@@ -75,6 +75,8 @@ void keyPressed() {
     toAudio.active = !toAudio.active;
   } else if (key == '2') {
     toVisuals.active = !toVisuals.active;
+  } else if (key== 'l') {
+    printForward = !printForward;
   }
 }
 

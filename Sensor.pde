@@ -16,8 +16,8 @@ class Sensor {
   }
 
   void callibrate(boolean start) {
-      callibrate = start;
-      initCallibration = start;
+    callibrate = start;
+    initCallibration = start;
   }
 
   void adjust() {
@@ -32,48 +32,9 @@ class Sensor {
   JSONObject getJSONObject() {
     return range.getJSONObject();
   }
-}
 
-enum ForwardStyle {
-  NO, RAW, NORM, MAP
-};
-
-class SensorForward {
-
-  Sensor sensor;
-  // Range toRange;
-  RangeMap rangeMap;
-  ForwardStyle style = ForwardStyle.RAW;
-
-  SensorForward(Sensor sensor, Range toRange) {
-    this.sensor = sensor;
-    this.rangeMap = new RangeMap(sensor.range, toRange);
-  }
-
-  float getValue() {
-    switch (style) {
-    case NO:
-      return  Float.NaN;
-    case NORM:
-      return sensor.getNormValue();
-    case MAP:
-      // println("map:"+sensor.value,rangeMap.in,rangeMap.out);
-      return rangeMap.rMap(sensor.value);
-    case RAW:
-    default:
-      return sensor.value;
-    }
-  }
-
-  void setStyle(int selection) {
-    style = ForwardStyle.values()[selection];
-  }
-
-  JSONObject getJSONObject() {
-    JSONObject json = new  JSONObject ();
-    json.setInt("style", (int) style.ordinal());
-    json.setJSONObject("toRange", rangeMap.out.getJSONObject());
-
-    return json;
+  void fromJSON(JSONObject json) {
+    range.fromJSON(json);
+   // println(range.min, range.max);
   }
 }
