@@ -1,36 +1,34 @@
 public class Range {
 
   private float min, max;
-  boolean dynamic;
 
   Range() {
-    this(0, 1, false);
+    this(0, 1);
   }
 
   Range(float min, float max) {
-    this(min, max, false);
-  }
-
-  Range(float min, float max, boolean dynamic) {
     this.min = min;
     this.max = max;
-    this.dynamic = dynamic;
+  }
+
+  void set(float val) {
+    min = val;
+    max = val;
   }
 
   void adjustRange(float val) {
     //   println("ad",val,min,max);
-    if (dynamic) { 
-      if (val < min) 
-        min = val;
-      else if (val > max) {
-        max = val;
-      }
+  //  println("cal", val);
+    if (val < min) 
+      min = val;
+    else if (val > max) {
+      max = val;
     }
-    // println(min,max);
+ //   println("cal", val, min, max);
   }
 
   String toString() {
-    return "min: "+min +" max: "+max + (dynamic ? " /dyn":"");
+    return "min: "+min +" max: "+max;
   }
 
   float norm(float value) {
@@ -45,7 +43,7 @@ public class Range {
     JSONObject json = new JSONObject();
     json.setFloat("min", min);
     json.setFloat("max", max);
-    println(min,max);
+    println(min, max);
     return json;
   }
 }

@@ -133,9 +133,9 @@ void forward(String message) {
       if (i < numberOfValues) {
         Sensor sensor = sensors[i];
         sensor.value = Integer.valueOf(list[i]);
-        if (callibrate) {
+        if (sensor.callibrate) {
           sensor.adjust();
-          // println(sensor.range.min,sensor.range.max);
+          //println("sensor",sensor.range.min,sensor.range.max);
           // println( java.util.Arrays.toString(Range.class.getMethods()));
           getRangeInCtrl("a", i).setLowValue((int)sensor.range.min);
           getRangeInCtrl("a", i).setHighValue((int)sensor.range.max);

@@ -3,6 +3,8 @@ class Sensor {
   String name;
   Range range;
   int value;
+  boolean callibrate;
+  boolean initCallibration;
 
   Sensor(String name) {
     this.name = name;
@@ -13,14 +15,18 @@ class Sensor {
     return range.norm(value);
   }
 
-  void callibrate() {
-    range.dynamic = true;
+  void callibrate(boolean start) {
+      callibrate = start;
+      initCallibration = start;
   }
 
   void adjust() {
+    //println("ra");
     range.adjustRange(value);
-    if (range.dynamic) 
-      range.dynamic = false;
+    if (initCallibration) {
+      range.set(value);
+      initCallibration = false;
+    }
   }
 
   JSONObject getJSONObject() {
@@ -51,7 +57,7 @@ class SensorForward {
     case NORM:
       return sensor.getNormValue();
     case MAP:
-   // println("map:"+sensor.value,rangeMap.in,rangeMap.out);
+      // println("map:"+sensor.value,rangeMap.in,rangeMap.out);
       return rangeMap.rMap(sensor.value);
     case RAW:
     default:

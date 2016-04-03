@@ -66,21 +66,12 @@ void setupGui() {
       .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
       .setGroup(audioGroup)
       //.setColorValue(0xffffff0)
-      .setFont(createFont("Arial", 16))
-      ;
-
- /*   cp5.addToggle("callibrate-"+i)
-      .setPosition(10, yBaseHeight + i * sensorYMargin)
-      .setSize(30, 20)
-      .setLabel("callibrate")
-      .setGroup(audioGroup);*/
+      .setFont(createFont("Arial", 16));
 
     createRange("range-in-v-", i, visualsGroup, 50);
     createRadio("sensor-v-", i, visualsGroup, 250);
     createRange("range-out-v-", i, visualsGroup, 450);
   }
-
-
   initRanges();
   init = false;
 }
@@ -116,9 +107,11 @@ void controlEvent(ControlEvent event) {
     else 
     configOutRange(getSensorForward(sendTo, index), min, max);
   } else if (name.startsWith("callibrate")) {
+    boolean on =  event.getController().getValue() == 1.0f;
     String[] edit =  name.split("-");
     int index = Integer.valueOf(edit[1]);
-    sensors[index].callibrate();
+    sensors[index].callibrate(on);
+    cp5.getController("range-in-a-"+index).setBroadcast(!on);
   } else if (name.equals("save")) {
     saveJSON();
   }
@@ -204,12 +197,13 @@ void initRanges() {
 void configInRange(SensorForward forward, float min, float max) {
   forward.sensor.range.min = min;
   forward.sensor.range.max = max;
+  //println("ri");
 }
 
 void configOutRange(SensorForward forward, float min, float max) {
   forward.rangeMap.out.min = min;
   forward.rangeMap.out.max = max;
-  println("r.o");
+  //println("r.o");
 }
 
 controlP5.Range getRangeInCtrl(String to, int index) {
