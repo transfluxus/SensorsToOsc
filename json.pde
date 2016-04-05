@@ -23,15 +23,19 @@ void loadJSON() {
 
   for (int i = 0; i < sensors.length; i++) {
     //sensors[i].fromJSON(main.getJSONArray("sensors").getJSONObject(i));
-    controlP5.Range r = getRangeInCtrl("a", i);
+    controlP5.Range ra = getRangeInCtrl("a", i);
+    controlP5.Range rv = getRangeInCtrl("v", i);
+    ra.setBroadcast(false);
+    rv.setBroadcast(false);
     sensors[i].fromJSON(main.getJSONArray("sensors").getJSONObject(i));
     //println(sensors[i].range.min, sensors[i].range.max);
-    r.setBroadcast(false);
-    r.setLowValue(sensors[i].range.min);
-    r.setHighValue(sensors[i].range.max);
-    r.setBroadcast(true);
+    ra.setLowValue(sensors[i].range.min);
+    ra.setHighValue(sensors[i].range.max);
+    rv.setLowValue(sensors[i].range.min);
+    rv.setHighValue(sensors[i].range.max);
   }
 
-  toAudio.fromJSON(main.getJSONObject("audio"));
+  toAudio.fromJSON(main.getJSONObject("audio"),"a");
+  toVisuals.fromJSON(main.getJSONObject("visuals"),"v");
   pauseGUIFW = false;
 }

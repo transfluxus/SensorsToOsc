@@ -42,9 +42,9 @@ class SensorForward {
     return json;
   }
 
-  void fromJSON(JSONObject json) {
+  void fromJSON(JSONObject json,String outShort) {
     style = ForwardStyle.values()[json.getInt("style")];
-    RadioButton radio = (RadioButton) cp5.getGroup("sensor-a-"+index);
+    RadioButton radio = (RadioButton) cp5.getGroup("sensor-"+outShort+"-"+index);
 
     int styleI = json.getInt("style");
     style = ForwardStyle.values()[styleI];
@@ -52,7 +52,7 @@ class SensorForward {
     java.util.List<Toggle> items = radio.getItems();
     items.get(styleI).setValue(true);
 
-    controlP5.Range r = getRangeOutCtrl("a", index);
+    controlP5.Range r = getRangeOutCtrl(outShort, index);
     rangeMap.out.fromJSON(json.getJSONObject("toRange"));
     r.setBroadcast(false);
     r.setLowValue(rangeMap.out.min);

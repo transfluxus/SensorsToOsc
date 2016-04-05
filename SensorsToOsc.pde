@@ -72,10 +72,11 @@ void draw() {
   if (toVisuals.active) {
     text(">V", width-40, height-20);
   }
+  
+  rndOSCVals();
 }
 
 void rndOSCVals() {
-  rndOSCVals();
   int vals[] = new int[NUMBER_OF_INPUT_VALUES];
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
     vals[i] = (int)(noise(i*3+frameCount*0.01f)*1024);
@@ -86,6 +87,7 @@ void rndOSCVals() {
 void keyPressed() {
   if (key == 'c') {
     callibrate =  !callibrate;
+    cp5.getController("callibrate").setValue(callibrate ? 1 : 0);
   } else if (key == '1') {
     toAudio.active = !toAudio.active;
   } else if (key == '2') {
@@ -180,7 +182,6 @@ void process(int[] vals) {
     println("number of incoming values("+numberOfValues+") doesn't match NUMBER_OF_INPUT_VALUES: "+NUMBER_OF_INPUT_VALUES+". Remaining values will be 0");
   }
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-
     if (i < numberOfValues) {
       Sensor sensor = sensors[i];
       sensor.value = vals[i];

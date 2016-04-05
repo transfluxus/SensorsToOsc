@@ -1,26 +1,140 @@
 {
-  "sensors": [{
-    "min": 163,
-    "max": 1000
-  }],
+  "sensors": [
+    {
+      "min": 0,
+      "max": 1023
+    },
+    {
+      "min": 818.4000244140625,
+      "max": 1023
+    },
+    {
+      "min": 0,
+      "max": 1023
+    },
+    {
+      "min": 0,
+      "max": 1023
+    },
+    {
+      "min": 0,
+      "max": 1023
+    },
+    {
+      "min": 0,
+      "max": 1023
+    },
+    {
+      "min": 0,
+      "max": 1023
+    }
+  ],
   "visuals": {
-    "forwards": [{
-      "style": 1,
-      "toRange": {
-        "min": 0,
-        "max": 1023
+    "forwards": [
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 2,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 2,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 3,
+        "toRange": {
+          "min": 673.9765014648438,
+          "max": 1023
+        }
+      },
+      {
+        "style": 3,
+        "toRange": {
+          "min": 679.9940795898438,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
       }
-    }],
+    ],
     "active": true
   },
   "audio": {
-    "forwards": [{
-      "style": 2,
-      "toRange": {
-        "min": 0,
-        "max": 246.72352600097656
+    "forwards": [
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 1023
+        }
       }
-    }],
+    ],
     "active": true
   }
 }

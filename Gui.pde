@@ -24,16 +24,14 @@ void setupGui() {
     .setPosition(360, 10)
     .setSize(50, 20)
     .setLabel("load");
-     
-    
-   cp5.addToggle("callibrate")
+
+  cp5.addToggle("callibrate")
     .setPosition(30, 10)
     .setSize(50, 20)
-    .setLabel("Callibrate");
-
+    .setLabel("callibrate");
 
   Group audioGroup = cp5.addGroup("Audio")
-  //  .setPosition(10, 70)
+    //  .setPosition(10, 70)
     .setSize(100, 1)
     .setBackgroundHeight(480)
     .close();
@@ -42,17 +40,16 @@ void setupGui() {
     .setPosition(150, 20)
     .setSize(50, 20)
     .setLabel("> Audio")
+    .changeValue(1)
     .setGroup(audioGroup);
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-
     cp5.addTextlabel(sensorNames[i]+"-a")
       .setText(sensorNames[i])
       .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
       .setGroup(audioGroup)
       //.setColorValue(0xffffff0)
-      .setFont(createFont("Arial", 16))
-      ;
+      .setFont(createFont("Arial", 16));
 
     cp5.addToggle("callibrate-"+i)
       .setPosition(10, yBaseHeight + i * sensorYMargin)
@@ -68,13 +65,14 @@ void setupGui() {
   // VISUALS
   Group visualsGroup = cp5.addGroup("Visuals")
     .setPosition(10, 100)
-    .setSize(100,1)
+    .setSize(100, 1)
     .close();
 
   cp5.addToggle("doForwardTo_Visuals")
     .setPosition(10, 10)
     .setSize(50, 20)
     .setLabel("> Visuals")
+    .changeValue(1)
     .setGroup(visualsGroup);
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
@@ -89,13 +87,13 @@ void setupGui() {
     createRadio("sensor-v-", i, visualsGroup, 250);
     createRange("range-out-v-", i, visualsGroup, 450);
   }
-  
- Accordion  accordion = cp5.addAccordion("acc")
-                 .setPosition(10,70)
-                 .setWidth(200)
-                 .addItem(audioGroup)
-                 .addItem(visualsGroup); 
-  
+
+  Accordion  accordion = cp5.addAccordion("acc")
+    .setPosition(10, 70)
+    .setWidth(200)
+    .addItem(audioGroup)
+    .addItem(visualsGroup); 
+
   initRanges();
   init = false;
 }
@@ -131,18 +129,22 @@ void controlEvent(ControlEvent event) {
       configInRange(getSensorForward(sendTo, index), min, max);
     else 
     configOutRange(getSensorForward(sendTo, index), min, max);
+  } else if (name.equals("callibrate")) {
+    callibrate = cp5.getController("callibrate").getValue() == 1.0;
+    for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
+      cp5.getController("callibrate-"+i).setValue(callibrate ? 1 : 0);
+    }
   } else if (name.startsWith("callibrate")) {
     boolean on =  event.getController().getValue() == 1.0f;
     String[] edit =  name.split("-");
     int index = Integer.valueOf(edit[1]);
     sensors[index].callibrate(on);
     cp5.getController("range-in-a-"+index).setBroadcast(!on);
-  } 
-  /*else if (name.equals("save")) {
-   saveJSON();
-   } else if(name.equals("load")) {
-   loadJSON(); 
-   }*/
+  } else if (name.equals("doForwardTo_Audio")) {
+    toAudio.active = cp5.getController("doForwardTo_Audio").getValue() == 1;
+  } else if (name.equals("doForwardTo_Visuals")) {
+    toVisuals.active = cp5.getController("doForwardTo_Visuals").getValue() == 1;
+  }
 }
 
 void createRadio(String preName, int index, Group g, int xPos) {

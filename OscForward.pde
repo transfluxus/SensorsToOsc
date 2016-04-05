@@ -48,11 +48,12 @@ class OscForward {
     return json;
   }
 
-  void fromJSON(JSONObject json) {
+  void fromJSON(JSONObject json,String outShort) {
     this.active =  json.getBoolean("active");
     JSONArray ar = json.getJSONArray("forwards");
     for (int i=0; i < forwards.length; i++) {
-      forwards[i].fromJSON(ar.getJSONObject(i));
+      forwards[i].fromJSON(ar.getJSONObject(i),outShort);
     }
   }
+  
 }
