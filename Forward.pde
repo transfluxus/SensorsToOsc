@@ -9,6 +9,7 @@ class SensorForward {
   // Range toRange;
   RangeMap rangeMap;
   ForwardStyle style = ForwardStyle.RAW;
+  float value;
 
   SensorForward(int index, Sensor sensor, Range toRange) {
     this.index = index;
@@ -19,16 +20,21 @@ class SensorForward {
   float getValue() {
     switch (style) {
     case NO:
-      return  Float.NaN;
+      value =   Float.NaN;
+      break;
     case NORM:
-      return sensor.getNormValue();
+      value =  sensor.getNormValue();
+      break;
     case MAP:
       // println("map:"+sensor.value,rangeMap.in,rangeMap.out);
-      return rangeMap.rMap(sensor.value);
+      value =  rangeMap.rMap(sensor.value);
+      break;
     case RAW:
     default:
-      return sensor.value;
+      value =  sensor.value;
+      break;
     }
+    return value;
   }
 
   void setStyle(int selection) {
@@ -42,7 +48,7 @@ class SensorForward {
     return json;
   }
 
-  void fromJSON(JSONObject json,String outShort) {
+  void fromJSON(JSONObject json, String outShort) {
     style = ForwardStyle.values()[json.getInt("style")];
     RadioButton radio = (RadioButton) cp5.getGroup("sensor-"+outShort+"-"+index);
 

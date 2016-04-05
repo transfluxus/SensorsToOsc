@@ -1,32 +1,24 @@
 {
   "sensors": [
     {
-      "min": 0,
-      "max": 1023
+      "min": 976,
+      "max": 1185
     },
     {
-      "min": 818.4000244140625,
-      "max": 1023
+      "min": 1104,
+      "max": 1354
     },
     {
-      "min": 0,
-      "max": 1023
+      "min": 1106,
+      "max": 1587
     },
     {
-      "min": 0,
-      "max": 1023
+      "min": 1249,
+      "max": 2197
     },
     {
-      "min": 0,
-      "max": 1023
-    },
-    {
-      "min": 0,
-      "max": 1023
-    },
-    {
-      "min": 0,
-      "max": 1023
+      "min": 1135,
+      "max": 1765
     }
   ],
   "visuals": {
@@ -35,49 +27,35 @@
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
+          "max": 4096
         }
       },
       {
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
-        }
-      },
-      {
-        "style": 2,
-        "toRange": {
-          "min": 0,
-          "max": 1023
-        }
-      },
-      {
-        "style": 2,
-        "toRange": {
-          "min": 0,
-          "max": 1023
-        }
-      },
-      {
-        "style": 3,
-        "toRange": {
-          "min": 673.9765014648438,
-          "max": 1023
-        }
-      },
-      {
-        "style": 3,
-        "toRange": {
-          "min": 679.9940795898438,
-          "max": 1023
+          "max": 4096
         }
       },
       {
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
+          "max": 4096
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 4096
         }
       }
     ],
@@ -89,49 +67,35 @@
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
+          "max": 4096
         }
       },
       {
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
+          "max": 4096
         }
       },
       {
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
+          "max": 4096
         }
       },
       {
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
+          "max": 4096
         }
       },
       {
         "style": 1,
         "toRange": {
           "min": 0,
-          "max": 1023
-        }
-      },
-      {
-        "style": 1,
-        "toRange": {
-          "min": 0,
-          "max": 1023
-        }
-      },
-      {
-        "style": 1,
-        "toRange": {
-          "min": 0,
-          "max": 1023
+          "max": 4096
         }
       }
     ],

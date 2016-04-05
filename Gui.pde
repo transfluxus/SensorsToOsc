@@ -28,7 +28,14 @@ void setupGui() {
   cp5.addToggle("callibrate")
     .setPosition(30, 10)
     .setSize(50, 20)
+    .setColorBackground(color(100, 100, 100))
     .setLabel("callibrate");
+
+  cp5.addToggle("showVals")
+    .setPosition(90, 10)
+    .setSize(50, 20)
+    .setColorBackground(color(100, 100, 100))
+    .setLabel("showVals");    
 
   Group audioGroup = cp5.addGroup("Audio")
     //  .setPosition(10, 70)
@@ -41,6 +48,7 @@ void setupGui() {
     .setSize(50, 20)
     .setLabel("> Audio")
     .changeValue(1)
+    .setColorBackground(color(100, 100, 100))
     .setGroup(audioGroup);
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
@@ -55,6 +63,7 @@ void setupGui() {
       .setPosition(10, yBaseHeight + i * sensorYMargin)
       .setSize(30, 20)
       .setLabel("callibrate")
+      .setColorBackground(color(100,100,100))
       .setGroup(audioGroup);
 
     createRange("range-in-a-", i, audioGroup, 50);
@@ -73,6 +82,7 @@ void setupGui() {
     .setSize(50, 20)
     .setLabel("> Visuals")
     .changeValue(1)
+    .setColorBackground(color(100,100,100))
     .setGroup(visualsGroup);
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
@@ -177,8 +187,8 @@ void createRange(String preName, int index, Group g, int xPos) {
     .setPosition(xPos, yBaseHeight + index * sensorYMargin)
     .setSize(180, 20)
     .setHandleSize(5)
-    .setRange(0, 1023)
-    .setRangeValues(0, 1023)
+    .setRange(0, pow(2, ANANLOG_BITS))
+    .setRangeValues(0, pow(2, ANANLOG_BITS))
     // after the initialization we turn broadcast back on again
     .setBroadcast(true)
     .setColorForeground(color(255, 40))

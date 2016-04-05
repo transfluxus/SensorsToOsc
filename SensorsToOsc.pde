@@ -8,15 +8,16 @@ import processing.serial.*;
 // SERIAL CONNECTION
 boolean startSerial = false;
 int SERIAL_PORT_NO =  0;
-int SERIAL_BAUDRATE = 9600;
+int SERIAL_BAUDRATE = 115200;
 // MY PORT
 int LISTEN_PORT = 12000;
 String addrPattern = "/sens";
-
+// ANALOG_BITS
+int ANANLOG_BITS = 12;
 
 // Sensor naming
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
-  "left-arm", "right-arm", "left-leg", "right-leg", "spine"};
+  "left-arm", "right-arm", "left-leg"};//, "right-leg", "spine"};
 
 // OSC SETTINGS FOR THE AUDIO/VISUALS
 String AUDIO_IP_ADDRESS = "";
@@ -33,6 +34,7 @@ String VISUALS_MSG_TAG = "/dance";
 
 // CALLIBRATE with key:c
 boolean callibrate = false;
+boolean showVals  =false;
 /* 
  false: values will be limited to their callibrated value
  true: will adjust the callibration values (min,max) when new extrams come in
@@ -52,7 +54,7 @@ Sensor[] sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
 boolean logAllMsgs;
 
 void setup() {
-  size(800, 700);
+  size(1000, 700);
   setupSerial();
   setupSensors();
   setupOSCForward();
@@ -71,8 +73,25 @@ void draw() {
   } 
   if (toVisuals.active) {
     text(">V", width-40, height-20);
+  } 
+  if (showVals) {
+    pushMatrix();
+    translate(700, 100);
+    text("Sensor", 0, 0);
+    text("> Audio", 80, 0);
+    text("> Visuals", 160, 0);
+    for (int i=0; i < sensors.length; i++) {
+      pushMatrix();
+      translate(0, (i+1)*25);
+      text(sensors[i].value, 0, 0);
+      if (toAudio.active) 
+        text(nf(toAudio.forwards[i].value,2,3), 80, 0);
+      if (toVisuals.active) 
+        text(toVisuals.forwards[i].value, 160, 0);
+      popMatrix();
+    }
+    popMatrix();
   }
-  
   rndOSCVals();
 }
 
@@ -181,21 +200,32 @@ void process(int[] vals) {
   if (numberOfValues != NUMBER_OF_INPUT_VALUES) {
     println("number of incoming values("+numberOfValues+") doesn't match NUMBER_OF_INPUT_VALUES: "+NUMBER_OF_INPUT_VALUES+". Remaining values will be 0");
   }
+  ///
+  pauseGUIFW = true;
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
     if (i < numberOfValues) {
       Sensor sensor = sensors[i];
       sensor.value = vals[i];
       if (sensor.callibrate) {
         sensor.adjust();
-        //println("sensor",sensor.range.min,sensor.range.max);
-        // println( java.util.Arrays.toString(Range.class.getMethods()));
-        getRangeInCtrl("a", i).setLowValue((int)sensor.range.min);
-        getRangeInCtrl("a", i).setHighValue((int)sensor.range.max);
+        getRangeInCtrl("a", i).setRangeValues((int)sensor.range.min, (int)sensor.range.max);
+        getRangeInCtrl("v", i).setRangeValues((int)sensor.range.min, (int)sensor.range.max);
       }
     } else {
       sensors[i].value = 0;
     }
   }
+  pauseGUIFW = false;
+  /* for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
+   getRangeInCtrl("a", i).update();
+   }*/
+  //
+  /*  for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
+   getRangeInCtrl("a", i).update();
+   } */
+  //getRangeInCtrl("a", i).setHighValue((int)sensor.range.max);
+  // getRangeInCtrl("v", i).setLowValue((int)sensor.range.min);
+  // getRangeInCtrl("v", i).setHighValue((int)sensor.range.max);
   toAudio.process();
   toVisuals.process();
 }
