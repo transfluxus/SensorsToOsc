@@ -5,6 +5,13 @@ int sensorYMargin = 60;
 
 boolean pauseGUIFW;
 
+void switchGuiHide() {
+  if (cp5.isVisible()) 
+    cp5.hide();
+  else
+    cp5.show();
+}
+
 void setupGui() {
   cp5 = new ControlP5(this);
 
@@ -17,12 +24,18 @@ void setupGui() {
     .setPosition(360, 10)
     .setSize(50, 20)
     .setLabel("load");
+     
+    
+   cp5.addToggle("callibrate")
+    .setPosition(30, 10)
+    .setSize(50, 20)
+    .setLabel("Callibrate");
+
 
   Group audioGroup = cp5.addGroup("Audio")
-    .setPosition(10, 20)
-    .setBackgroundHeight(100)
+  //  .setPosition(10, 70)
     .setSize(100, 1)
-    .setBackgroundColor(color(255, 50))
+    .setBackgroundHeight(480)
     .close();
 
   cp5.addToggle("doForwardTo_Audio")
@@ -54,10 +67,8 @@ void setupGui() {
 
   // VISUALS
   Group visualsGroup = cp5.addGroup("Visuals")
-    .setPosition(20, 600)
-    .setSize(100, 20)
-    .setBackgroundHeight(100)
-    .setBackgroundColor(color(255, 50))
+    .setPosition(10, 100)
+    .setSize(100,1)
     .close();
 
   cp5.addToggle("doForwardTo_Visuals")
@@ -78,6 +89,13 @@ void setupGui() {
     createRadio("sensor-v-", i, visualsGroup, 250);
     createRange("range-out-v-", i, visualsGroup, 450);
   }
+  
+ Accordion  accordion = cp5.addAccordion("acc")
+                 .setPosition(10,70)
+                 .setWidth(200)
+                 .addItem(audioGroup)
+                 .addItem(visualsGroup); 
+  
   initRanges();
   init = false;
 }

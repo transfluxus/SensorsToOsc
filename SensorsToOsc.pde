@@ -6,11 +6,15 @@ import controlP5.*;
 import processing.serial.*;
 
 // SERIAL CONNECTION
+boolean startSerial = false;
 int SERIAL_PORT_NO =  0;
 int SERIAL_BAUDRATE = 9600;
+// MY PORT
+int LISTEN_PORT = 12000;
+String addrPattern = "/sens";
+
 
 // Sensor naming
-int NUMBER_OF_INPUT_VALUES = 1;
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
   "left-arm", "right-arm", "left-leg", "right-leg", "spine"};
 
@@ -36,6 +40,8 @@ boolean callibrate = false;
 boolean rangeAdjust = false;
 
 //NOT FOR EDIT, ESSENTIAL OBJECTS 
+int NUMBER_OF_INPUT_VALUES = sensorNames.length;
+
 Serial serial;
 OscP5 osc;
 ControlP5 cp5;
@@ -51,6 +57,7 @@ void setup() {
   setupSensors();
   setupOSCForward();
   setupGui();
+  frameRate(20);
 }
 
 void draw() {
@@ -65,7 +72,15 @@ void draw() {
   if (toVisuals.active) {
     text(">V", width-40, height-20);
   }
-  forward(""+(int)(noise(frameCount*0.01f)*1024));
+}
+
+void rndOSCVals() {
+  rndOSCVals();
+  int vals[] = new int[NUMBER_OF_INPUT_VALUES];
+  for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
+    vals[i] = (int)(noise(i*3+frameCount*0.01f)*1024);
+  }
+  process(vals);
 }
 
 void keyPressed() {
@@ -77,16 +92,19 @@ void keyPressed() {
     toVisuals.active = !toVisuals.active;
   } else if (key== 'l') {
     printForward = !printForward;
+  } else if (key == 'h') {
+    switchGuiHide();
   }
 }
 
 void setupSerial() {
-  int si = 0;
-  for (String serial : Serial.list()) {
-    println((si++), serial);
+  if (!startSerial) {
+    int si = 0;
+    for (String serial : Serial.list()) {
+      println((si++), serial);
+    }
+    serial = new Serial(this, Serial.list()[SERIAL_PORT_NO], SERIAL_BAUDRATE);
   }
-  //serial =
-  //new Serial(this, Serial.list()[SERIAL_PORT_NO], SERIAL_BAUDRATE);
 }
 
 void setupSensors() {
@@ -96,7 +114,7 @@ void setupSensors() {
 }
 
 void setupOSCForward() {
-  osc = new OscP5(this, 6000); 
+  osc = new OscP5(this, LISTEN_PORT); 
   toAudio = new OscForward(AUDIO_IP_ADDRESS, AUDIO_PORT, AUDIO_MSG_TAG);
   toVisuals = new OscForward(VISUALS_IP_ADDRESS, VISUALS_PORT, VISUALS_MSG_TAG);
 }
@@ -123,31 +141,57 @@ void serialEvent(Serial port) {
   }
 }
 
-void forward(String message) {
-  String[] list = split(message, ',');
+void oscEvent(OscMessage msg) {
+  if (msg.checkAddrPattern(addrPattern)==true) {
+    int le = msg.addrPattern().length();
+    int[] vals = new int[le];
+    for (int i=0; i < le; i++) {
+      vals[i] =  msg.get(i).intValue();
+    }
+    process(vals);
+  }
+}
+
+int[] prepareString(String msg) {
+  String[] list = split(msg, ',');
   int numberOfValues = list.length;
+  int[] vals = new int[numberOfValues];
+  for (int i=0; i < numberOfValues; i++) {
+    try {
+      vals[i] =  Integer.valueOf(list[i]);
+    }  
+    catch(NumberFormatException exc) {
+      println("Couldn't parse: "+list[i]+ " setting it to 0");
+      sensors[i].value = 0;
+    }
+  }
+  return vals;
+}
+
+void forward(String message) {
+  process(prepareString(message));
+}
+
+
+void process(int[] vals) {
+  int numberOfValues = vals.length;
   //int[] serialValues = new int[NUMBER_OF_INPUT_VALUES];
   if (numberOfValues != NUMBER_OF_INPUT_VALUES) {
     println("number of incoming values("+numberOfValues+") doesn't match NUMBER_OF_INPUT_VALUES: "+NUMBER_OF_INPUT_VALUES+". Remaining values will be 0");
   }
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-    try {
-      if (i < numberOfValues) {
-        Sensor sensor = sensors[i];
-        sensor.value = Integer.valueOf(list[i]);
-        if (sensor.callibrate) {
-          sensor.adjust();
-          //println("sensor",sensor.range.min,sensor.range.max);
-          // println( java.util.Arrays.toString(Range.class.getMethods()));
-          getRangeInCtrl("a", i).setLowValue((int)sensor.range.min);
-          getRangeInCtrl("a", i).setHighValue((int)sensor.range.max);
-        }
-      } else {
-        sensors[i].value = 0;
+
+    if (i < numberOfValues) {
+      Sensor sensor = sensors[i];
+      sensor.value = vals[i];
+      if (sensor.callibrate) {
+        sensor.adjust();
+        //println("sensor",sensor.range.min,sensor.range.max);
+        // println( java.util.Arrays.toString(Range.class.getMethods()));
+        getRangeInCtrl("a", i).setLowValue((int)sensor.range.min);
+        getRangeInCtrl("a", i).setHighValue((int)sensor.range.max);
       }
-    } 
-    catch(NumberFormatException exc) {
-      println("Couldn't parse: "+list[i]+ " setting it to 0");
+    } else {
       sensors[i].value = 0;
     }
   }
