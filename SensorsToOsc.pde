@@ -93,7 +93,7 @@ void draw() {
     }
     popMatrix();
   }
-  rndOSCVals();
+  //rndOSCVals();
 }
 
 void rndOSCVals() {
