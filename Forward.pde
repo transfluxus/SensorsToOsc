@@ -20,18 +20,18 @@ class SensorForward {
   float getValue() {
     switch (style) {
     case NO:
-      value =   Float.NaN;
+      value = Float.NaN;
       break;
     case NORM:
       value =  sensor.getNormValue();
       break;
     case MAP:
       // println("map:"+sensor.value,rangeMap.in,rangeMap.out);
-      value =  rangeMap.rMap(sensor.value);
+      value =  rangeMap.rMap(sensor.value());
       break;
     case RAW:
     default:
-      value =  sensor.value;
+      value =  sensor.value();
       break;
     }
     return value;

@@ -15,16 +15,6 @@ void switchGuiHide() {
 void setupGui() {
   cp5 = new ControlP5(this);
 
-  cp5.addBang("saveJSON")
-    .setPosition(300, 10)
-    .setSize(50, 20)
-    .setLabel("save");
-
-  cp5.addBang("loadJSON")
-    .setPosition(360, 10)
-    .setSize(50, 20)
-    .setLabel("load");
-
   cp5.addToggle("callibrate")
     .setPosition(30, 10)
     .setSize(50, 20)
@@ -35,7 +25,23 @@ void setupGui() {
     .setPosition(90, 10)
     .setSize(50, 20)
     .setColorBackground(color(100, 100, 100))
-    .setLabel("showVals");    
+    .setLabel("showVals");   
+
+  cp5.addToggle("adjust")
+    .setPosition(150, 10)
+    .setSize(50, 20)
+    .setColorBackground(color(100, 100, 100))
+    .setLabel("adjust");
+
+  cp5.addBang("saveJSON")
+    .setPosition(300, 10)
+    .setSize(50, 20)
+    .setLabel("save");
+
+  cp5.addBang("loadJSON")
+    .setPosition(360, 10)
+    .setSize(50, 20)
+    .setLabel("load");
 
   Group audioGroup = cp5.addGroup("Audio")
     //  .setPosition(10, 70)

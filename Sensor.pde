@@ -20,8 +20,18 @@ class Sensor {
     initCallibration = start;
   }
 
+  void value(int value) {
+   if(adjust) {
+     range.adjustRange(value);
+   }
+   this.value = value;
+  }
+  
+  int value() {
+    return value;
+  }
+
   void adjust() {
-    //println("ra");
     range.adjustRange(value);
     if (initCallibration) {
       range.set(value);

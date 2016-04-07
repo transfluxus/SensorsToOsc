@@ -1,28 +1,39 @@
 {
   "sensors": [
     {
-      "min": 976,
-      "max": 1185
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1104,
-      "max": 1354
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1106,
-      "max": 1587
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1249,
-      "max": 2197
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1135,
-      "max": 1765
+      "min": 0,
+      "max": 4096
+    },
+    {
+      "min": 0,
+      "max": 4096
     }
   ],
   "visuals": {
     "forwards": [
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
       {
         "style": 1,
         "toRange": {
@@ -63,6 +74,13 @@
   },
   "audio": {
     "forwards": [
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
       {
         "style": 1,
         "toRange": {

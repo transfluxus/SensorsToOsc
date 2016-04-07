@@ -17,13 +17,13 @@ int ANANLOG_BITS = 12;
 
 // Sensor naming
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
-  "left-arm", "right-arm", "left-leg"};//, "right-leg", "spine"};
+  "left-arm", "right-arm", "left-leg", "right-leg"};//, "spine"};
 
 // OSC SETTINGS FOR THE AUDIO/VISUALS
 String AUDIO_IP_ADDRESS = "";
-String VISUALS_IP_ADDRESS = "";
+String VISUALS_IP_ADDRESS = "127.0.0.1";//"192.168.2.47";
 int  AUDIO_PORT = 6000;
-int VISUALS_PORT = 6000;
+int VISUALS_PORT = 12345;
 String AUDIO_MSG_TAG = "/dance";
 String VISUALS_MSG_TAG = "/dance";
 // OTHER SETTINGS
@@ -34,6 +34,7 @@ String VISUALS_MSG_TAG = "/dance";
 
 // CALLIBRATE with key:c
 boolean callibrate = false;
+boolean adjust = false;
 boolean showVals  =false;
 /* 
  false: values will be limited to their callibrated value
@@ -83,9 +84,9 @@ void draw() {
     for (int i=0; i < sensors.length; i++) {
       pushMatrix();
       translate(0, (i+1)*25);
-      text(sensors[i].value, 0, 0);
+      text(sensors[i].value(), 0, 0);
       if (toAudio.active) 
-        text(nf(toAudio.forwards[i].value,2,3), 80, 0);
+        text(nf(toAudio.forwards[i].value, 2, 3), 80, 0);
       if (toVisuals.active) 
         text(toVisuals.forwards[i].value, 160, 0);
       popMatrix();
@@ -164,7 +165,7 @@ void serialEvent(Serial port) {
 
 void oscEvent(OscMessage msg) {
   if (msg.checkAddrPattern(addrPattern)==true) {
-    int le = msg.addrPattern().length();
+    int le = msg.typetag().length();
     int[] vals = new int[le];
     for (int i=0; i < le; i++) {
       vals[i] =  msg.get(i).intValue();
@@ -183,7 +184,7 @@ int[] prepareString(String msg) {
     }  
     catch(NumberFormatException exc) {
       println("Couldn't parse: "+list[i]+ " setting it to 0");
-      sensors[i].value = 0;
+      sensors[i].value(0);
     }
   }
   return vals;
@@ -205,27 +206,17 @@ void process(int[] vals) {
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
     if (i < numberOfValues) {
       Sensor sensor = sensors[i];
-      sensor.value = vals[i];
+      sensor.value(vals[i]);
       if (sensor.callibrate) {
         sensor.adjust();
         getRangeInCtrl("a", i).setRangeValues((int)sensor.range.min, (int)sensor.range.max);
         getRangeInCtrl("v", i).setRangeValues((int)sensor.range.min, (int)sensor.range.max);
       }
     } else {
-      sensors[i].value = 0;
+      sensors[i].value(0);
     }
   }
   pauseGUIFW = false;
-  /* for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-   getRangeInCtrl("a", i).update();
-   }*/
-  //
-  /*  for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-   getRangeInCtrl("a", i).update();
-   } */
-  //getRangeInCtrl("a", i).setHighValue((int)sensor.range.max);
-  // getRangeInCtrl("v", i).setLowValue((int)sensor.range.min);
-  // getRangeInCtrl("v", i).setHighValue((int)sensor.range.max);
   toAudio.process();
   toVisuals.process();
 }

@@ -17,14 +17,11 @@ public class Range {
   }
 
   void adjustRange(float val) {
-    //   println("ad",val,min,max);
-    //  println("cal", val);
     if (val < min) 
       min = val;
     else if (val > max) {
       max = val;
     }
-    //   println("cal", val, min, max);
   }
 
   String toString() {

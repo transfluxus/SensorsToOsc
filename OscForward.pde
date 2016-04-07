@@ -28,7 +28,7 @@ class OscForward {
       if (value != Float.NaN) {
         msg.add(value);
         if (printForward)
-          println(forward.sensor.value, value+"(s:"+forward.style+")");
+          println(forward.sensor.value(), value+"(s:"+forward.style+")");
       }
     }
     osc.send(msg, remoteAddress);
