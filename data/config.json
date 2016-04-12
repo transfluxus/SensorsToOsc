@@ -1,6 +1,10 @@
 {
 	"useThis":true,
 	"listenPort":12000,
+	"sensors": [
+	"left-shoulder", "right-shoulder", 
+  	"left-arm", "right-arm", "left-leg", "right-leg", "spine","accel"
+	],
 	"audio": {
 		"ip":"127.0.0.1",
 		"port":6000,

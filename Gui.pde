@@ -64,7 +64,7 @@ void setupGui() {
   Group audioGroup = cp5.addGroup("Audio")
     //  .setPosition(10, 70)
     .setSize(100, 1)
-    .setBackgroundHeight(480)
+    .setBackgroundHeight(60 + sensorYMargin * NUMBER_OF_INPUT_VALUES)
     .close();
 
   cp5.addToggle("doForwardTo_Audio")
@@ -102,7 +102,7 @@ void setupGui() {
     .close();
 
   cp5.addToggle("doForwardTo_Visuals")
-    .setPosition(10, 10)
+    .setPosition(150, 20)
     .setSize(50, 20)
     .setLabel("> Visuals")
     .changeValue(1)
@@ -113,7 +113,7 @@ void setupGui() {
     cp5.addTextlabel(sensorNames[i]+"-v")
       .setText(sensorNames[i])
       .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
-      .setGroup(audioGroup)
+      .setGroup(visualsGroup)
       //.setColorValue(0xffffff0)
       .setFont(createFont("Arial", 16));
 

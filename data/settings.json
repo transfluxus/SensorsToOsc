@@ -1,69 +1,91 @@
 {
   "sensors": [
     {
-      "min": 0,
-      "max": 4096
+      "min": 457,
+      "max": 654
     },
     {
-      "min": 0,
-      "max": 4096
+      "min": 336,
+      "max": 506
     },
     {
-      "min": 0,
-      "max": 4096
+      "min": 161,
+      "max": 603
     },
     {
-      "min": 0,
-      "max": 4096
+      "min": 292,
+      "max": 718
     },
     {
-      "min": 0,
-      "max": 4096
+      "min": 382,
+      "max": 732
     },
     {
-      "min": 0,
-      "max": 4096
+      "min": 412,
+      "max": 664
+    },
+    {
+      "min": 441,
+      "max": 732
+    },
+    {
+      "min": 412,
+      "max": 513
     }
   ],
   "visuals": {
     "forwards": [
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 3,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 3,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 3,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 3,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
+      {
+        "style": 2,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
+      {
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
@@ -74,6 +96,20 @@
   },
   "audio": {
     "forwards": [
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
+      {
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
       {
         "style": 1,
         "toRange": {

@@ -1,8 +1,6 @@
 import netP5.*;
 import oscP5.*;
-
 import controlP5.*;
-
 import processing.serial.*;
 
 // SERIAL CONNECTION
@@ -32,10 +30,6 @@ int  RECORDER_PORT = 6000;
 String RECORDER_MSG_TAG = "/dance";
 
 // OTHER SETTINGS
-
-
-//boolean NORMALIZE_ALL = false; // normalizing 
-
 
 // CALLIBRATE with key:c
 boolean callibrate = false;
@@ -168,6 +162,8 @@ void showVals() {
 }
 
 void setupSensors() {
+  if (readConfig()) 
+    return;
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
     sensors[i] = new Sensor(sensorNames[i]);
   }

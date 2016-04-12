@@ -22,12 +22,24 @@ void count() {
  visualsOut++;
  }*/
 
+
+
 boolean readConfig() {
   JSONObject main = loadJSONObject("config.json");
   boolean useIt = main.getBoolean("useThis");
   if (!useIt)
     return false;
-     osc = new OscP5(this, main.getInt("listenPort")); 
+  //
+  JSONArray sensorsJSON = main.getJSONArray("sensors");
+  NUMBER_OF_INPUT_VALUES = sensorsJSON.size();
+  sensorNames = new String[NUMBER_OF_INPUT_VALUES];
+  sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
+  for (int i = 0; i < NUMBER_OF_INPUT_VALUES; i++) {
+    sensorNames[i] = sensorsJSON.getString(i); 
+    sensors[i] = new Sensor(sensorNames[i]);
+  }
+  //
+  osc = new OscP5(this, main.getInt("listenPort")); 
   toAudio = new OscForward(main.getJSONObject("audio"));
   toVisuals = new OscForward(main.getJSONObject("visuals"));
   toRecorder = new OscForward(main.getJSONObject("record"));
