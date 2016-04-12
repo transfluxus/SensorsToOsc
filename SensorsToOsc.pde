@@ -17,7 +17,7 @@ int ANANLOG_BITS = 12;
 
 // Sensor naming
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
-  "left-arm", "right-arm", "left-leg", "right-leg"};//, "spine"};
+  "left-arm", "right-arm", "left-leg", "right-leg", "spine"};
 
 // OSC SETTINGS FOR THE AUDIO/VISUALS
 String AUDIO_IP_ADDRESS = "";
@@ -55,7 +55,7 @@ int NUMBER_OF_INPUT_VALUES = sensorNames.length;
 Serial serial;
 OscP5 osc;
 ControlP5 cp5;
-OscForward[] forwards = new OscForward[3];
+//OscForward[] forwards = new OscForward[3];
 OscForward toAudio, toVisuals, toRecorder;
 Sensor[] sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
 
@@ -137,7 +137,7 @@ void sensorIndicator() {
     text(">R", width-30, 0);
   }  
   if (showMsgCount) {
-     text("msgs:"+messageCount,50,0);
+    text("msgs:"+messageCount, 50, 0);
   }
   popMatrix();
 }
@@ -174,12 +174,14 @@ void setupSensors() {
 }
 
 void setupOSCForward() {
+  if (readConfig()) 
+    return;
   osc = new OscP5(this, LISTEN_PORT); 
   toAudio = new OscForward(AUDIO_IP_ADDRESS, AUDIO_PORT, AUDIO_MSG_TAG);
   toVisuals = new OscForward(VISUALS_IP_ADDRESS, VISUALS_PORT, VISUALS_MSG_TAG);
   toRecorder = new OscForward(RECORDER_IP_ADDRESS, RECORDER_PORT, RECORDER_MSG_TAG);
-  toAudio.type = AUDIO;
-  toVisuals.type = VISUALS;
+  // toAudio.type = AUDIO;
+  // toVisuals.type = VISUALS;
   toRecorder.active = false;
 }
 

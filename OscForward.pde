@@ -8,7 +8,7 @@ class OscForward {
 
   boolean active = true;
   NetAddress remoteAddress;
-  int type;
+  //int type;
   //int port; // for json storing
 
   final SensorForward forwards[] = new SensorForward[NUMBER_OF_INPUT_VALUES];
@@ -16,10 +16,21 @@ class OscForward {
 
   OscForward(String ipAddress, int port, String messageTag) {
     this.messageTag = messageTag;
+    setupFWs();
+    remoteAddress = new NetAddress(ipAddress, port);
+  }
+
+  OscForward(JSONObject json) {
+    this.messageTag = json.getString("MessageTag");
+    setupFWs();
+    remoteAddress = new NetAddress(json.getString("ip"), json.getInt("port"));
+    active = json.getBoolean("active");
+  }
+
+  void setupFWs() {
     for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
       forwards[i] = new SensorForward(i, sensors[i], new Range());
     }
-    remoteAddress = new NetAddress(ipAddress, port);
   }
 
   void process() {
@@ -35,7 +46,7 @@ class OscForward {
       }
     }
     osc.send(msg, remoteAddress);
-    countOut(type);
+    // countOut(type);
   }
 
   // for All forwards

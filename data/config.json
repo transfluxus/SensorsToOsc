@@ -1,0 +1,21 @@
+{
+	"useThis":true,
+	"listenPort":12000,
+	"audio": {
+		"ip":"127.0.0.1",
+		"port":6000,
+		"active":true,
+		"MessageTag":"/dance"
+	},
+	"visuals":{
+		"ip":"",
+		"port":6000,
+		"active":true,
+		"MessageTag":"/dance"
+	},"record":{
+		"ip":"",
+		"port":6000,
+		"active":false,
+		"MessageTag":"/dance"
+	}
+}

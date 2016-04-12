@@ -137,7 +137,7 @@ void controlEvent(ControlEvent event) {
     return;
   //println(pauseGUIFW);
   String name = event.getName();
-  println("event:", name);
+  //println("event:", name);
   if (name.startsWith("sensor")) {
     String[] edit =  name.split("-");
     int index = Integer.valueOf(edit[2]);
