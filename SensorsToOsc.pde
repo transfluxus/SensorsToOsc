@@ -26,6 +26,11 @@ int  AUDIO_PORT = 6000;
 int VISUALS_PORT = 12345;
 String AUDIO_MSG_TAG = "/dance";
 String VISUALS_MSG_TAG = "/dance";
+// 
+String RECORDER_IP_ADDRESS = "";
+int  RECORDER_PORT = 6000;
+String RECORDER_MSG_TAG = "/dance";
+
 // OTHER SETTINGS
 
 
@@ -35,7 +40,9 @@ String VISUALS_MSG_TAG = "/dance";
 // CALLIBRATE with key:c
 boolean callibrate = false;
 boolean adjust = false;
-boolean showVals  =false;
+boolean showVals = false;
+boolean createRndValue = false;
+boolean showMsgCount = false;
 /* 
  false: values will be limited to their callibrated value
  true: will adjust the callibration values (min,max) when new extrams come in
@@ -48,7 +55,8 @@ int NUMBER_OF_INPUT_VALUES = sensorNames.length;
 Serial serial;
 OscP5 osc;
 ControlP5 cp5;
-OscForward toAudio, toVisuals;
+OscForward[] forwards = new OscForward[3];
+OscForward toAudio, toVisuals, toRecorder;
 Sensor[] sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
 
 //
@@ -60,40 +68,18 @@ void setup() {
   setupSensors();
   setupOSCForward();
   setupGui();
-  frameRate(20);
+  //frameRate(20);
+  surface.setResizable(true);
 }
 
 void draw() {
   background(0);
   fill(255);
-  if (callibrate) {
-    text("CAL", 10, height-20);
-  } 
-  if (toAudio.active) {
-    text(">A", width-60, height-20);
-  } 
-  if (toVisuals.active) {
-    text(">V", width-40, height-20);
-  } 
-  if (showVals) {
-    pushMatrix();
-    translate(700, 100);
-    text("Sensor", 0, 0);
-    text("> Audio", 80, 0);
-    text("> Visuals", 160, 0);
-    for (int i=0; i < sensors.length; i++) {
-      pushMatrix();
-      translate(0, (i+1)*25);
-      text(sensors[i].value(), 0, 0);
-      if (toAudio.active) 
-        text(nf(toAudio.forwards[i].value, 2, 3), 80, 0);
-      if (toVisuals.active) 
-        text(toVisuals.forwards[i].value, 160, 0);
-      popMatrix();
-    }
-    popMatrix();
-  }
-  //rndOSCVals();
+  sensorIndicator();
+  showVals();
+  //println(frameRate);
+  if (createRndValue)
+    rndOSCVals();
 }
 
 void rndOSCVals() {
@@ -112,11 +98,17 @@ void keyPressed() {
     toAudio.active = !toAudio.active;
   } else if (key == '2') {
     toVisuals.active = !toVisuals.active;
+  } else if (key == '3') {
+    toRecorder.active =! toRecorder.active;
   } else if (key== 'l') {
-    printForward = !printForward;
+    showVals = !showVals;
+    cp5.getController("showVals").setValue(showVals? 1 : 0);
   } else if (key == 'h') {
     switchGuiHide();
-  }
+  } else if (key == 'r') 
+    createRndValue = !createRndValue;
+  else if (key == 'm') 
+    showMsgCount = !showMsgCount;
 }
 
 void setupSerial() {
@@ -126,6 +118,52 @@ void setupSerial() {
       println((si++), serial);
     }
     serial = new Serial(this, Serial.list()[SERIAL_PORT_NO], SERIAL_BAUDRATE);
+  }
+}
+
+void sensorIndicator() {
+  pushMatrix();
+  translate(0, height-20);
+  if (callibrate) {
+    text("CAL", 10, 0);
+  } 
+  if (toAudio.active) {
+    text(">A", width-70, 0);
+  } 
+  if (toVisuals.active) {
+    text(">V", width-50, 0);
+  } 
+  if (toRecorder.active) {
+    text(">R", width-30, 0);
+  }  
+  if (showMsgCount) {
+     text("msgs:"+messageCount,50,0);
+  }
+  popMatrix();
+}
+
+
+void showVals() {
+  if (showVals) {
+    pushMatrix();
+    if (cp5.isVisible())
+      translate(700, 100);
+    else
+      translate(20, 20);
+    text("Sensor", 0, 0);
+    text("> Audio", 80, 0);
+    text("> Visuals", 160, 0);
+    for (int i=0; i < sensors.length; i++) {
+      pushMatrix();
+      translate(0, (i+1)*25);
+      text(sensors[i].value(), 0, 0);
+      if (toAudio.active) 
+        text(nf(toAudio.forwards[i].value, 2, 3), 80, 0);
+      if (toVisuals.active) 
+        text(toVisuals.forwards[i].value, 160, 0);
+      popMatrix();
+    }
+    popMatrix();
   }
 }
 
@@ -139,6 +177,10 @@ void setupOSCForward() {
   osc = new OscP5(this, LISTEN_PORT); 
   toAudio = new OscForward(AUDIO_IP_ADDRESS, AUDIO_PORT, AUDIO_MSG_TAG);
   toVisuals = new OscForward(VISUALS_IP_ADDRESS, VISUALS_PORT, VISUALS_MSG_TAG);
+  toRecorder = new OscForward(RECORDER_IP_ADDRESS, RECORDER_PORT, RECORDER_MSG_TAG);
+  toAudio.type = AUDIO;
+  toVisuals.type = VISUALS;
+  toRecorder.active = false;
 }
 
 String serialMessage = "";
@@ -165,6 +207,7 @@ void serialEvent(Serial port) {
 
 void oscEvent(OscMessage msg) {
   if (msg.checkAddrPattern(addrPattern)==true) {
+    count();
     int le = msg.typetag().length();
     int[] vals = new int[le];
     for (int i=0; i < le; i++) {
@@ -219,4 +262,5 @@ void process(int[] vals) {
   pauseGUIFW = false;
   toAudio.process();
   toVisuals.process();
+  toRecorder.process();
 }

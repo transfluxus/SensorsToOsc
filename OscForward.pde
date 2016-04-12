@@ -1,9 +1,14 @@
 boolean printForward;
 
+int AUDIO = 0;
+int VISUALS = 1;
+
+
 class OscForward {
 
   boolean active = true;
   NetAddress remoteAddress;
+  int type;
   //int port; // for json storing
 
   final SensorForward forwards[] = new SensorForward[NUMBER_OF_INPUT_VALUES];
@@ -14,8 +19,6 @@ class OscForward {
     for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
       forwards[i] = new SensorForward(i, sensors[i], new Range());
     }
-    // osc
-    // this.port = port; 
     remoteAddress = new NetAddress(ipAddress, port);
   }
 
@@ -32,6 +35,7 @@ class OscForward {
       }
     }
     osc.send(msg, remoteAddress);
+    countOut(type);
   }
 
   // for All forwards
@@ -48,12 +52,11 @@ class OscForward {
     return json;
   }
 
-  void fromJSON(JSONObject json,String outShort) {
+  void fromJSON(JSONObject json, String outShort) {
     this.active =  json.getBoolean("active");
     JSONArray ar = json.getJSONArray("forwards");
     for (int i=0; i < forwards.length; i++) {
-      forwards[i].fromJSON(ar.getJSONObject(i),outShort);
+      forwards[i].fromJSON(ar.getJSONObject(i), outShort);
     }
   }
-  
 }

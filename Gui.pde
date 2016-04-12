@@ -6,40 +6,58 @@ int sensorYMargin = 60;
 boolean pauseGUIFW;
 
 void switchGuiHide() {
-  if (cp5.isVisible()) 
+  if (cp5.isVisible()) {
     cp5.hide();
-  else
+    surface.setSize(400, 300);
+  } else {
     cp5.show();
+    surface.setSize(1000, 700);
+  }
 }
 
 void setupGui() {
   cp5 = new ControlP5(this);
+
+  int toggleXShift = 60;
+  int toggleX = 30;
 
   cp5.addToggle("callibrate")
     .setPosition(30, 10)
     .setSize(50, 20)
     .setColorBackground(color(100, 100, 100))
     .setLabel("callibrate");
+  toggleX += toggleXShift;
 
   cp5.addToggle("showVals")
-    .setPosition(90, 10)
+    .setPosition(toggleX, 10)
     .setSize(50, 20)
     .setColorBackground(color(100, 100, 100))
     .setLabel("showVals");   
+  toggleX += toggleXShift;
 
   cp5.addToggle("adjust")
-    .setPosition(150, 10)
+    .setPosition(toggleX, 10)
     .setSize(50, 20)
     .setColorBackground(color(100, 100, 100))
     .setLabel("adjust");
+  toggleX += toggleXShift;
 
+  /*
+  cp5.addToggle("record")
+   .setPosition(toggleX, 10)
+   .setSize(50, 20)
+   .setColorBackground(color(100, 100, 100))
+   .setLabel("record");
+   toggleX += toggleXShift*2;
+   */
   cp5.addBang("saveJSON")
-    .setPosition(300, 10)
+    .setPosition(toggleX, 10)
     .setSize(50, 20)
     .setLabel("save");
+  toggleX += toggleXShift;
 
   cp5.addBang("loadJSON")
-    .setPosition(360, 10)
+    .setPosition(toggleX, 10)
     .setSize(50, 20)
     .setLabel("load");
 
@@ -69,7 +87,7 @@ void setupGui() {
       .setPosition(10, yBaseHeight + i * sensorYMargin)
       .setSize(30, 20)
       .setLabel("callibrate")
-      .setColorBackground(color(100,100,100))
+      .setColorBackground(color(100, 100, 100))
       .setGroup(audioGroup);
 
     createRange("range-in-a-", i, audioGroup, 50);
@@ -88,7 +106,7 @@ void setupGui() {
     .setSize(50, 20)
     .setLabel("> Visuals")
     .changeValue(1)
-    .setColorBackground(color(100,100,100))
+    .setColorBackground(color(100, 100, 100))
     .setGroup(visualsGroup);
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
