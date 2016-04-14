@@ -1,55 +1,37 @@
 {
   "sensors": [
     {
-      "min": 457,
-      "max": 654
+      "min": 740,
+      "max": 923
     },
     {
-      "min": 336,
-      "max": 506
+      "min": 959,
+      "max": 991
     },
     {
-      "min": 161,
-      "max": 603
+      "min": 911,
+      "max": 1034
     },
     {
-      "min": 292,
-      "max": 718
+      "min": 1143,
+      "max": 1189
     },
     {
-      "min": 382,
-      "max": 732
+      "min": 1013,
+      "max": 1211
     },
     {
-      "min": 412,
-      "max": 664
+      "min": 1006,
+      "max": 1157
     },
     {
-      "min": 441,
-      "max": 732
-    },
-    {
-      "min": 412,
-      "max": 513
+      "min": 1134,
+      "max": 1164
     }
   ],
   "visuals": {
     "forwards": [
       {
-        "style": 2,
-        "toRange": {
-          "min": 0,
-          "max": 4096
-        }
-      },
-      {
-        "style": 2,
-        "toRange": {
-          "min": 0,
-          "max": 4096
-        }
-      },
-      {
         "style": 3,
         "toRange": {
           "min": 0,
@@ -57,35 +39,42 @@
         }
       },
       {
-        "style": 3,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 3,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 3,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 2,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 2,
+        "style": 1,
+        "toRange": {
+          "min": 0,
+          "max": 4096
+        }
+      },
+      {
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
@@ -97,56 +86,49 @@
   "audio": {
     "forwards": [
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 1,
-        "toRange": {
-          "min": 0,
-          "max": 4096
-        }
-      },
-      {
-        "style": 1,
+        "style": 2,
         "toRange": {
           "min": 0,
           "max": 4096

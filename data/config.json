@@ -3,7 +3,7 @@
 	"listenPort":12000,
 	"sensors": [
 	"left-shoulder", "right-shoulder", 
-  	"left-arm", "right-arm", "left-leg", "right-leg", "spine","accel"
+  	"left-arm", "right-arm", "left-leg", "right-leg", "spine"
 	],
 	"audio": {
 		"ip":"127.0.0.1",

@@ -178,6 +178,8 @@ void controlEvent(ControlEvent event) {
     toAudio.active = cp5.getController("doForwardTo_Audio").getValue() == 1;
   } else if (name.equals("doForwardTo_Visuals")) {
     toVisuals.active = cp5.getController("doForwardTo_Visuals").getValue() == 1;
+  } else if(name.equals("showVals")) {
+   showVals =  cp5.getController("showVals").getValue() == 1;
   }
 }
 

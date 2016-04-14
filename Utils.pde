@@ -6,7 +6,7 @@ int audioOut, visualsOut;
 void count() {
   long now = millis();
   if (now - lastMeassureTime > 1000) {
-    println( messageCount, audioOut, visualsOut);
+    //println( messageCount, audioOut, visualsOut);
     messageCount = 0;
     audioOut = 0;
     visualsOut = 0;
