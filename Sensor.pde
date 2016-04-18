@@ -21,12 +21,21 @@ class Sensor {
   }
 
   void value(int value) {
-   if(adjust) {
-     range.adjustRange(value);
-   }
-   this.value = value;
+    if (flipInput) {
+     value = maxAnalogValue - value - 1;
+    }
+    if (false) {       // bye bye for now
+      float Fvalue = min(0.9, max((float)value / maxAnalogValue, 0.1));
+      println(Fvalue);
+      value = (int)(filter.filterUnitFloat(Fvalue) * maxAnalogValue);
+      // exit();
+    }
+    if (adjust) {
+      range.adjustRange(value);
+    }
+    this.value = value;
   }
-  
+
   int value() {
     return value;
   }
@@ -34,7 +43,8 @@ class Sensor {
   void adjust() {
     range.adjustRange(value);
     if (initCallibration) {
-      range.set(value);
+      range.min = value;
+      range.max = value+1;
       initCallibration = false;
     }
   }
@@ -45,6 +55,6 @@ class Sensor {
 
   void fromJSON(JSONObject json) {
     range.fromJSON(json);
-   // println(range.min, range.max);
+    // println(range.min, range.max);
   }
 }

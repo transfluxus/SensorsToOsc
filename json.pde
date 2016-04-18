@@ -22,11 +22,7 @@ void loadJSON() {
   //println(main);
 
   for (int i = 0; i < sensors.length; i++) {
-    //sensors[i].fromJSON(main.getJSONArray("sensors").getJSONObject(i));
-    // ra.setBroadcast(false);
-    // rv.setBroadcast(false);
     sensors[i].fromJSON(main.getJSONArray("sensors").getJSONObject(i));
-    //println(sensors[i].range.min, sensors[i].range.max);
   }
   updateRangesFromSensordata();
   toAudio.fromJSON(main.getJSONObject("audio"), "a");

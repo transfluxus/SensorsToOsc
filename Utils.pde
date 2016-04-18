@@ -31,6 +31,8 @@ boolean readConfig() {
     return false;
   //
   JSONArray sensorsJSON = main.getJSONArray("sensors");
+  flipInput = main.getBoolean("flip");
+  //
   NUMBER_OF_INPUT_VALUES = sensorsJSON.size();
   sensorNames = new String[NUMBER_OF_INPUT_VALUES];
   sensors = new Sensor[NUMBER_OF_INPUT_VALUES];

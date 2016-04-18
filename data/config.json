@@ -1,20 +1,23 @@
 {
 	"useThis":true,
 	"listenPort":12000,
+	"flip":true,
 	"sensors": [
 	"left-shoulder", "right-shoulder", 
-  	"left-arm", "right-arm", "left-leg", "right-leg", "spine"
+  	"left-arm", "right-arm", 
+  	"left-leg", "right-leg", 
+  	"spine"
 	],
 	"audio": {
-		"ip":"127.0.0.1",
+		"ip":"192.168.2.47",
 		"port":6000,
-		"active":true,
+		"active":false,
 		"MessageTag":"/dance"
 	},
 	"visuals":{
-		"ip":"",
+		"ip":"192.168.2.45",
 		"port":6000,
-		"active":true,
+		"active":false,
 		"MessageTag":"/dance"
 	},"record":{
 		"ip":"",

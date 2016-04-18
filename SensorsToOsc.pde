@@ -2,6 +2,7 @@ import netP5.*;
 import oscP5.*;
 import controlP5.*;
 import processing.serial.*;
+import signal.library.*;
 
 // SERIAL CONNECTION
 boolean startSerial = false;
@@ -12,6 +13,7 @@ int LISTEN_PORT = 12000;
 String addrPattern = "/sens";
 // ANALOG_BITS
 int ANANLOG_BITS = 12;
+int maxAnalogValue = (int) pow(2,ANANLOG_BITS);
 
 // Sensor naming
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
@@ -37,6 +39,7 @@ boolean adjust = false;
 boolean showVals = false;
 boolean createRndValue = false;
 boolean showMsgCount = false;
+boolean flipInput = false;
 /* 
  false: values will be limited to their callibrated value
  true: will adjust the callibration values (min,max) when new extrams come in
@@ -56,12 +59,15 @@ Sensor[] sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
 //
 boolean logAllMsgs;
 
+SignalFilter filter;
+
 void setup() {
   size(1000, 700);
   setupSerial();
   setupSensors();
   setupOSCForward();
   setupGui();
+  //setupFilter();
   //frameRate(20);
   surface.setResizable(true);
 }
@@ -74,6 +80,8 @@ void draw() {
   //println(frameRate);
   if (createRndValue)
     rndOSCVals();
+    if(frameRate < 30) 
+      println("OHO! framerate < 30"+ frameCount);
 }
 
 void rndOSCVals() {
@@ -103,6 +111,10 @@ void keyPressed() {
     createRndValue = !createRndValue;
   else if (key == 'm') 
     showMsgCount = !showMsgCount;
+    else if(key == 'i') {
+       println("Audio: "+toAudio.remoteAddress); 
+       println("Visuals: "+toAudio.remoteAddress); 
+    }
 }
 
 void setupSerial() {

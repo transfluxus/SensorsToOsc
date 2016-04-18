@@ -1,38 +1,38 @@
 {
   "sensors": [
     {
-      "min": 740,
-      "max": 923
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 959,
-      "max": 991
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 911,
-      "max": 1034
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1143,
-      "max": 1189
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1013,
-      "max": 1211
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1006,
-      "max": 1157
+      "min": 0,
+      "max": 4096
     },
     {
-      "min": 1134,
-      "max": 1164
+      "min": 0,
+      "max": 4096
     }
   ],
   "visuals": {
     "forwards": [
       {
-        "style": 3,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
@@ -81,7 +81,7 @@
         }
       }
     ],
-    "active": true
+    "active": false
   },
   "audio": {
     "forwards": [
@@ -93,28 +93,28 @@
         }
       },
       {
-        "style": 2,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 2,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 2,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
         }
       },
       {
-        "style": 2,
+        "style": 1,
         "toRange": {
           "min": 0,
           "max": 4096
