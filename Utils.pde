@@ -38,7 +38,7 @@ boolean readConfig() {
   sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
   for (int i = 0; i < NUMBER_OF_INPUT_VALUES; i++) {
     sensorNames[i] = sensorsJSON.getString(i); 
-    sensors[i] = new Sensor(sensorNames[i]);
+    sensors[i] = new Sensor(sensorNames[i],i);
   }
   //
   osc = new OscP5(this, main.getInt("listenPort")); 

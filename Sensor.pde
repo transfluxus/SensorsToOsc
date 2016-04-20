@@ -5,10 +5,12 @@ class Sensor {
   int value;
   boolean callibrate;
   boolean initCallibration;
+  int index;
 
-  Sensor(String name) {
+  Sensor(String name,int index) {
     this.name = name;
     this.range = new Range(510, 520);
+    this.range.index = index;
   }
 
   float getNormValue() {
@@ -23,12 +25,6 @@ class Sensor {
   void value(int value) {
     if (flipInput) {
      value = maxAnalogValue - value - 1;
-    }
-    if (false) {       // bye bye for now
-      float Fvalue = min(0.9, max((float)value / maxAnalogValue, 0.1));
-      println(Fvalue);
-      value = (int)(filter.filterUnitFloat(Fvalue) * maxAnalogValue);
-      // exit();
     }
     if (adjust) {
       range.adjustRange(value);

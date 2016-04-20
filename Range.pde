@@ -1,6 +1,7 @@
 public class Range {
 
   private float min, max;
+  int index;
 
   Range() {
     this(0, 1);
@@ -17,10 +18,14 @@ public class Range {
   }
 
   void adjustRange(float val) {
-    if (val < min) 
+    if (val < min) {
       min = val;
-    else if (val > max) {
+      getRangeInCtrl("a", index).setRangeValues((int)min, (int)max);
+      getRangeInCtrl("v", index).setRangeValues((int)min, (int)max);
+    } else if (val > max) {
       max = val;
+      getRangeInCtrl("a", index).setRangeValues((int)min, (int)max);
+      getRangeInCtrl("v", index).setRangeValues((int)min, (int)max);
     }
   }
 

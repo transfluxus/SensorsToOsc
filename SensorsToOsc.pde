@@ -2,7 +2,7 @@ import netP5.*;
 import oscP5.*;
 import controlP5.*;
 import processing.serial.*;
-import signal.library.*;
+
 
 // SERIAL CONNECTION
 boolean startSerial = false;
@@ -13,7 +13,7 @@ int LISTEN_PORT = 12000;
 String addrPattern = "/sens";
 // ANALOG_BITS
 int ANANLOG_BITS = 12;
-int maxAnalogValue = (int) pow(2,ANANLOG_BITS);
+int maxAnalogValue = (int) pow(2, ANANLOG_BITS);
 
 // Sensor naming
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
@@ -56,6 +56,8 @@ ControlP5 cp5;
 OscForward toAudio, toVisuals, toRecorder;
 Sensor[] sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
 
+boolean msgReceived = false;
+
 //
 boolean logAllMsgs;
 
@@ -67,27 +69,37 @@ void setup() {
   setupSensors();
   setupOSCForward();
   setupGui();
-  //setupFilter();
+  setupFilter();
   //frameRate(20);
   surface.setResizable(true);
+  textSize(14);
 }
 
 void draw() {
   background(0);
   fill(255);
   sensorIndicator();
-  showVals();
+  printVals();
+  displayVals();
   //println(frameRate);
   if (createRndValue)
     rndOSCVals();
-    if(frameRate < 30) 
-      println("OHO! framerate < 30"+ frameCount);
+  if (frameRate < 30) 
+    println("OHO! framerate < 30"+ frameCount);
+  if (msgReceived) {
+    fill(255, 0, 0);
+    ellipse(width-40, 40, 10, 10);
+  }
+  msgReceived = false;
 }
 
 void rndOSCVals() {
   int vals[] = new int[NUMBER_OF_INPUT_VALUES];
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-    vals[i] = (int)(noise(i*3+frameCount*0.01f)*1024);
+    vals[i] = (int)(noise(i*3+frameCount*0.01f)*maxAnalogValue);
+  }
+  if (mousePressed && mouseButton == RIGHT) {
+    vals[0] = maxAnalogValue;
   }
   process(vals);
 }
@@ -111,14 +123,14 @@ void keyPressed() {
     createRndValue = !createRndValue;
   else if (key == 'm') 
     showMsgCount = !showMsgCount;
-    else if(key == 'i') {
-       println("Audio: "+toAudio.remoteAddress); 
-       println("Visuals: "+toAudio.remoteAddress); 
-    }
+  else if (key == 'i') {
+    println("Audio: "+toAudio.remoteAddress); 
+    println("Visuals: "+toVisuals.remoteAddress);
+  }
 }
 
 void setupSerial() {
-  if (!startSerial) {
+  if (startSerial) {
     int si = 0;
     for (String serial : Serial.list()) {
       println((si++), serial);
@@ -149,27 +161,47 @@ void sensorIndicator() {
 }
 
 
-void showVals() {
+void printVals() {
   if (showVals) {
     pushMatrix();
     if (cp5.isVisible())
-      translate(700, 100);
+      translate(759, 100);
     else
-      translate(20, 20);
+      translate(130, 20);
     text("Sensor", 0, 0);
-    text("> Audio", 80, 0);
-    text("> Visuals", 160, 0);
+    text("> Audio", 70, 0);
+    text("> Visuals", 150, 0);
     for (int i=0; i < sensors.length; i++) {
       pushMatrix();
       translate(0, (i+1)*25);
-      text(sensors[i].value(), 0, 0);
+      text(i, -105, 0);
+      text(sensors[i].name, -90, 0);
+      text(sensors[i].value(), 15, 0);
       if (toAudio.active) 
-        text(nf(toAudio.forwards[i].value, 2, 3), 80, 0);
+        text(nf(toAudio.forwards[i].value, 2, 3), 70, 0);
       if (toVisuals.active) 
-        text(toVisuals.forwards[i].value, 160, 0);
+        text(toVisuals.forwards[i].value, 150, 0);
       popMatrix();
     }
     popMatrix();
+  }
+}
+
+void  displayVals() {
+  for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
+    stroke(255);
+    if (cp5.isVisible()) {
+      float vs = cp5.getController("range-in-v-"+i).getAbsolutePosition()[0] + map(sensors[i].value, 0, maxAnalogValue, 0, 180);
+      float ys = 80 + yBaseHeight + i * sensorYMargin;
+      line(vs, ys, vs, ys + 30);
+    } else {
+      float vs = 20 + map(sensors[i].value, 0, maxAnalogValue, 0, 180);
+      float ys = height - 80 + i * 10;
+      line(vs, ys, vs, ys + 10);
+    }
+  }
+  if(!cp5.isVisible()) {
+    line(20,height-85,200,height-85);
   }
 }
 
@@ -177,7 +209,7 @@ void setupSensors() {
   if (readConfig()) 
     return;
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-    sensors[i] = new Sensor(sensorNames[i]);
+    sensors[i] = new Sensor(sensorNames[i], i);
   }
 }
 
@@ -217,7 +249,8 @@ void serialEvent(Serial port) {
 
 void oscEvent(OscMessage msg) {
   if (msg.checkAddrPattern(addrPattern)==true) {
-    count();
+    count();    
+    msgReceived = true;
     int le = msg.typetag().length();
     int[] vals = new int[le];
     for (int i=0; i < le; i++) {
@@ -269,6 +302,8 @@ void process(int[] vals) {
       sensors[i].value(0);
     }
   }
+  applyFilter();
+
   pauseGUIFW = false;
   toAudio.process();
   toVisuals.process();

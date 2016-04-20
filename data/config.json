@@ -3,10 +3,10 @@
 	"listenPort":12000,
 	"flip":true,
 	"sensors": [
-	"left-shoulder", "right-shoulder", 
-  	"left-arm", "right-arm", 
-  	"left-leg", "right-leg", 
-  	"spine"
+	"right-arm", "left-arm",
+	"right-shoulder", "left-shoulder", 
+  	"back",
+  	"left-leg", "right-leg"
 	],
 	"audio": {
 		"ip":"192.168.2.47",

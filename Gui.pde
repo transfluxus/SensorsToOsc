@@ -63,23 +63,25 @@ void setupGui() {
     .setPosition(toggleX, 10)
     .setSize(50, 20)
     .setLabel("load");
+  toggleX += toggleXShift;
 
-  /*
+  cp5.addSlider("Frequency")
+    .setPosition(toggleX, 10)
+    .setRange(1, 400)
+    .setValue(40);
+
+
+  cp5.addSlider("Beta")
+    .setPosition(toggleX, 30)
+    .setRange(0.01, 1)
+    .setValue(1);
+
+  toggleX += 3 * toggleXShift;
+
   cp5.addToggle("Filter")
-   .setPosition(510, 10)
-   .setSize(50, 20)
-   .setColorBackground(color(100, 100, 100));
-   
-   cp5.addSlider("Frequency")
-   .setPosition(350, 10)
-   .setRange(1, 100)
-   .setValue(40);
-   
-   cp5.addSlider("Beta")
-   .setPosition(350, 30)
-   .setRange(0.01, 1)
-   .setValue(1);
-   */
+    .setPosition(toggleX, 10)
+    .setSize(50, 20)
+    .setColorBackground(color(100, 100, 100));
 
   Group audioGroup = cp5.addGroup("Audio")
     //  .setPosition(10, 70)
@@ -202,14 +204,15 @@ void controlEvent(ControlEvent event) {
     showVals =  cp5.getController("showVals").getValue() == 1;
   } else if (name.equals("flip")) {
     flipInput =  cp5.getController("flip").getValue() == 1;
-  } 
-  /*else if (name.equals("Frequency")) {
+  } else if (name.equals("Frequency")) {
+    doFilter = false;
     filter.setFrequency(cp5.getController("Frequency").getValue());
+    doFilter = true;
   } else if (name.equals("Beta")) {
     filter.setBeta(cp5.getController("Beta").getValue());
   } else if (name.equals("Filter")) {
     doFilter =  cp5.getController("Filter").getValue() == 1;
-  }*/
+  }
 }
 
 void createRadio(String preName, int index, Group g, int xPos) {
