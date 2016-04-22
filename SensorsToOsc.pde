@@ -2,6 +2,7 @@ import netP5.*;
 import oscP5.*;
 import controlP5.*;
 import processing.serial.*;
+import signal.library.*;
 
 
 // SERIAL CONNECTION

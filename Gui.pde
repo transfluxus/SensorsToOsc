@@ -70,12 +70,6 @@ void setupGui() {
     .setRange(1, 400)
     .setValue(40);
 
-
-  cp5.addSlider("Beta")
-    .setPosition(toggleX, 30)
-    .setRange(0.01, 1)
-    .setValue(1);
-
   toggleX += 3 * toggleXShift;
 
   cp5.addToggle("Filter")
@@ -209,9 +203,7 @@ void controlEvent(ControlEvent event) {
     doFilter = false;
     filter.setFrequency(cp5.getController("Frequency").getValue());
     doFilter = prevFilter;
-  } else if (name.equals("Beta")) {
-    filter.setBeta(cp5.getController("Beta").getValue());
-  } else if (name.equals("Filter")) {
+  }  else if (name.equals("Filter")) {
     doFilter =  cp5.getController("Filter").getValue() == 1;
   }
 }
