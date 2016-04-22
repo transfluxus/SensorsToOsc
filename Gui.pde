@@ -99,7 +99,7 @@ void setupGui() {
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
     cp5.addTextlabel(sensorNames[i]+"-a")
-      .setText(sensorNames[i])
+      .setText(i+": "+sensorNames[i])
       .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
       .setGroup(audioGroup)
       //.setColorValue(0xffffff0)
@@ -133,7 +133,7 @@ void setupGui() {
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
     cp5.addTextlabel(sensorNames[i]+"-v")
-      .setText(sensorNames[i])
+      .setText(i+": "+sensorNames[i])
       .setPosition(15, yBaseHeight - 25 + i * sensorYMargin)
       .setGroup(visualsGroup)
       //.setColorValue(0xffffff0)
@@ -205,9 +205,10 @@ void controlEvent(ControlEvent event) {
   } else if (name.equals("flip")) {
     flipInput =  cp5.getController("flip").getValue() == 1;
   } else if (name.equals("Frequency")) {
+    boolean prevFilter = doFilter;
     doFilter = false;
     filter.setFrequency(cp5.getController("Frequency").getValue());
-    doFilter = true;
+    doFilter = prevFilter;
   } else if (name.equals("Beta")) {
     filter.setBeta(cp5.getController("Beta").getValue());
   } else if (name.equals("Filter")) {

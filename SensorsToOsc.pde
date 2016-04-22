@@ -40,6 +40,7 @@ boolean showVals = false;
 boolean createRndValue = false;
 boolean showMsgCount = false;
 boolean flipInput = false;
+boolean takeOSCIn = true;
 /* 
  false: values will be limited to their callibrated value
  true: will adjust the callibration values (min,max) when new extrams come in
@@ -73,6 +74,9 @@ void setup() {
   //frameRate(20);
   surface.setResizable(true);
   textSize(14);
+
+  //int[]  audioReMap = {4, 1, 0, 3, 2, 5, 6};//{4,x,0,3,x,x,6};
+  //toAudio.remap(audioReMap);
 }
 
 void draw() {
@@ -87,7 +91,11 @@ void draw() {
   if (frameRate < 30) 
     println("OHO! framerate < 30"+ frameCount);
   if (msgReceived) {
-    fill(255, 0, 0);
+    if (takeOSCIn) {
+      fill(255, 0, 0);
+    } else { 
+      noFill();
+    }
     ellipse(width-40, 40, 10, 10);
   }
   msgReceived = false;
@@ -102,6 +110,7 @@ void rndOSCVals() {
     vals[0] = maxAnalogValue;
   }
   process(vals);
+  text("RND", 20, height-20);
 }
 
 void keyPressed() {
@@ -126,6 +135,10 @@ void keyPressed() {
   else if (key == 'i') {
     println("Audio: "+toAudio.remoteAddress); 
     println("Visuals: "+toVisuals.remoteAddress);
+  } else if (key == 'd') {
+    // reload config json
+  } else if (key == 'w') {
+    takeOSCIn = !takeOSCIn;
   }
 }
 
@@ -200,8 +213,8 @@ void  displayVals() {
       line(vs, ys, vs, ys + 10);
     }
   }
-  if(!cp5.isVisible()) {
-    line(20,height-85,200,height-85);
+  if (!cp5.isVisible()) {
+    line(20, height-85, 200, height-85);
   }
 }
 
@@ -218,6 +231,7 @@ void setupOSCForward() {
     return;
   osc = new OscP5(this, LISTEN_PORT); 
   toAudio = new OscForward(AUDIO_IP_ADDRESS, AUDIO_PORT, AUDIO_MSG_TAG);
+
   toVisuals = new OscForward(VISUALS_IP_ADDRESS, VISUALS_PORT, VISUALS_MSG_TAG);
   toRecorder = new OscForward(RECORDER_IP_ADDRESS, RECORDER_PORT, RECORDER_MSG_TAG);
   // toAudio.type = AUDIO;
@@ -256,7 +270,8 @@ void oscEvent(OscMessage msg) {
     for (int i=0; i < le; i++) {
       vals[i] =  msg.get(i).intValue();
     }
-    process(vals);
+    if (takeOSCIn)
+      process(vals);
   }
 }
 

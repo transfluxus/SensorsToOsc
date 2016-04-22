@@ -3,26 +3,32 @@
 	"listenPort":12000,
 	"flip":true,
 	"sensors": [
+	"back",
 	"right-arm", "left-arm",
 	"right-shoulder", "left-shoulder", 
-  	"back",
   	"left-leg", "right-leg"
 	],
 	"audio": {
-		"ip":"192.168.2.47",
+		"ip":"192.168.0.173",
 		"port":6000,
 		"active":false,
-		"MessageTag":"/dance"
+		"MessageTag":"/dance",
+		"doRemap":true,
+		"remap":[4, 1, 0, 3, 2, 5, 6]
 	},
 	"visuals":{
-		"ip":"192.168.2.45",
+		"ip":"192.168.0.208",
 		"port":6000,
 		"active":false,
-		"MessageTag":"/dance"
+		"MessageTag":"/dance",
+		"doRemap":false,
+		"remap":[]
 	},"record":{
-		"ip":"",
+		"ip":"192.168.2.72",
 		"port":6000,
 		"active":false,
-		"MessageTag":"/dance"
+		"MessageTag":"/dance",
+		"doRemap":false,
+		"remap":[]
 	}
 }
