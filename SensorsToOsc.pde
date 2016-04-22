@@ -42,6 +42,7 @@ boolean createRndValue = false;
 boolean showMsgCount = false;
 boolean flipInput = false;
 boolean takeOSCIn = true;
+
 /* 
  false: values will be limited to their callibrated value
  true: will adjust the callibration values (min,max) when new extrams come in
@@ -165,7 +166,7 @@ void sensorIndicator() {
     text(">R", width-30, 0);
   }  
   if (showMsgCount) {
-    text("msgs:"+messageCount, 50, 0);
+    text("msgs:"+lastFullCount, 50, 0);
   }
   popMatrix();
 }

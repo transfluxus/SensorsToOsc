@@ -67,7 +67,7 @@ void setupGui() {
 
   cp5.addSlider("Frequency")
     .setPosition(toggleX, 10)
-    .setRange(1, 400)
+    .setRange(1, 600)
     .setValue(40);
 
   toggleX += 3 * toggleXShift;

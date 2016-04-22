@@ -1,11 +1,13 @@
 
 long lastMeassureTime;
 int messageCount;
+int lastFullCount;
 int audioOut, visualsOut;
 
 void count() {
   long now = millis();
   if (now - lastMeassureTime > 1000) {
+    lastFullCount = messageCount;
     //println( messageCount, audioOut, visualsOut);
     messageCount = 0;
     audioOut = 0;
