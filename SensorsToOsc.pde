@@ -71,12 +71,8 @@ void setup() {
   setupOSCForward();
   setupGui();
   setupFilter();
-  //frameRate(20);
   surface.setResizable(true);
   textSize(14);
-
-  //int[]  audioReMap = {4, 1, 0, 3, 2, 5, 6};//{4,x,0,3,x,x,6};
-  //toAudio.remap(audioReMap);
 }
 
 void draw() {
