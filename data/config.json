@@ -17,7 +17,7 @@
 		"remap":[4, 1, 0, 3, 2, 5, 6]
 	},
 	"visuals":{
-		"ip":"192.168.0.208",
+		"ip":"192.168.0.18",
 		"port":6000,
 		"active":false,
 		"MessageTag":"/dance",

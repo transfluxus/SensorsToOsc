@@ -16,6 +16,9 @@ String addrPattern = "/sens";
 int ANANLOG_BITS = 12;
 int maxAnalogValue = (int) pow(2, ANANLOG_BITS);
 
+int LOWER_IGNORE_THRESH = 10;
+int UPPER_IGNORE_THRESH = maxAnalogValue - 10;
+
 // Sensor naming
 String[] sensorNames= {"left-shoulder", "right-shoulder", 
   "left-arm", "right-arm", "left-leg", "right-leg", "spine"};
@@ -42,6 +45,8 @@ boolean createRndValue = false;
 boolean showMsgCount = false;
 boolean flipInput = false;
 boolean takeOSCIn = true;
+boolean showIps = false;
+
 
 /* 
  false: values will be limited to their callibrated value
@@ -58,6 +63,7 @@ ControlP5 cp5;
 //OscForward[] forwards = new OscForward[3];
 OscForward toAudio, toVisuals, toRecorder;
 Sensor[] sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
+
 
 boolean msgReceived = false;
 
@@ -133,10 +139,13 @@ void keyPressed() {
   else if (key == 'i') {
     println("Audio: "+toAudio.remoteAddress); 
     println("Visuals: "+toVisuals.remoteAddress);
+    showIps = !showIps;
   } else if (key == 'd') {
     // reload config json
   } else if (key == 'w') {
     takeOSCIn = !takeOSCIn;
+  } else if(key == 'n') {
+    reloadNetworkDestinations();
   }
 }
 
@@ -195,6 +204,10 @@ void printVals() {
       popMatrix();
     }
     popMatrix();
+  }
+  if (showIps) {
+    text("Audio: "+toAudio.remoteAddress,700,20);
+    text("Visuals: "+toVisuals.remoteAddress,700,40);
   }
 }
 

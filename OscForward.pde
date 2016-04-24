@@ -14,7 +14,7 @@ class OscForward {
   final SensorForward forwards[] = new SensorForward[NUMBER_OF_INPUT_VALUES];
   String messageTag;
   //int remap[] = new int[NUMBER_OF_INPUT_VALUES];
- // boolean doRemap = false;
+  // boolean doRemap = false;
 
   OscForward(String ipAddress, int port, String messageTag) {
     this.messageTag = messageTag;
@@ -45,7 +45,7 @@ class OscForward {
   }
 
   void process() {
-    if (!active) 
+    if (!active && !callibrate) 
       return;
     OscMessage msg = new OscMessage(messageTag);
     for (SensorForward forward : forwards) {
@@ -56,7 +56,8 @@ class OscForward {
           println(forward.sensor.value(), value+"(s:"+forward.style+")");
       }
     }
-    osc.send(msg, remoteAddress);
+    if(active)
+      osc.send(msg, remoteAddress);
     // countOut(type);
   }
 
@@ -84,8 +85,23 @@ class OscForward {
 
   void remap(int[] rem) {
     println("setting remap");
-    for(int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
-        forwards[i].sensor = sensors[rem[i]];
+    for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
+      forwards[i].sensor = sensors[rem[i]];
+    }
+  }
+
+  void resetNetowk(JSONObject json) {
+    this.messageTag = json.getString("MessageTag");
+    remoteAddress = new NetAddress(json.getString("ip"), json.getInt("port"));
+    active = json.getBoolean("active");
+    boolean doRemap = json.getBoolean("doRemap");
+    if (doRemap) {  
+      JSONArray jsonReMap = json.getJSONArray("remap");
+      int[] remapAr = new int[NUMBER_OF_INPUT_VALUES]; 
+      for (int i= 0; i < NUMBER_OF_INPUT_VALUES; i++) {
+        remapAr[i] = jsonReMap.getInt(i);
+      }
+      remap(remapAr);
     }
   }
 }

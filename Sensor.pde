@@ -23,7 +23,7 @@ class Sensor {
   }
 
   void value(int value) {
-    if(value == 0) 
+    if(value < LOWER_IGNORE_THRESH || value > UPPER_IGNORE_THRESH) 
       return;
     if (flipInput) {
      value = maxAnalogValue - value - 1;

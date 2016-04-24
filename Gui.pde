@@ -90,6 +90,8 @@ void setupGui() {
     .changeValue(1)
     .setColorBackground(color(100, 100, 100))
     .setGroup(audioGroup);
+    
+    // HERE
 
   for (int i=0; i < NUMBER_OF_INPUT_VALUES; i++) {
     cp5.addTextlabel(sensorNames[i]+"-a")

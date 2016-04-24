@@ -40,7 +40,7 @@ boolean readConfig() {
   sensors = new Sensor[NUMBER_OF_INPUT_VALUES];
   for (int i = 0; i < NUMBER_OF_INPUT_VALUES; i++) {
     sensorNames[i] = sensorsJSON.getString(i); 
-    sensors[i] = new Sensor(sensorNames[i],i);
+    sensors[i] = new Sensor(sensorNames[i], i);
   }
   //
   osc = new OscP5(this, main.getInt("listenPort")); 
@@ -49,4 +49,10 @@ boolean readConfig() {
   toRecorder = new OscForward(main.getJSONObject("record"));
 
   return true;
+}
+
+void reloadNetworkDestinations() {
+  JSONObject main = loadJSONObject("config.json");
+  toAudio.resetNetowk(main.getJSONObject("audio"));
+  toVisuals.resetNetowk(main.getJSONObject("visuals"));
 }
